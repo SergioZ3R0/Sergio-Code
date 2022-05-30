@@ -1,7 +1,7 @@
 #!/bin/bash
 
-name_compressed=$(7z l content.gzip | grep "Name" -A 2 | tail -n 1 | awk 'NF{print $NF}')
-7z x content.gzip > /dev/null 2>&1
+name_decompressed=$(7z l $1 | grep "Name" -A 2 | tail -n 1 | awk 'NF{print $NF}')
+7z x $1 > /dev/null 2>&1
 
 while true; do
 	7z l $name_decompressed > /dev/null 2>&1
