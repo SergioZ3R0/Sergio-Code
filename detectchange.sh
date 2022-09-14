@@ -1,5 +1,5 @@
 #!/bin/bash
-name_$(file ./*|grep ASCII|awk -F: '{print $1}'|head -1)
+name=$(file ./*|grep ASCII|awk -F: '{print $1}'|head -1)
   while true; do
     mv ./"$name" ./"$name".txt
     if ["$(echo $?)" == "0"]; then
