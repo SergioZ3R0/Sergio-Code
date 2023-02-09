@@ -11,5 +11,5 @@ mkdir /var/error404/$1
 #Asignarle el porpietario
 chown "$2:$3" /var/error404/$1
 #Asignarle los permisos
-chmod "+$4" /var/error404/$1
+chmod "$4" /var/error404/$1
 #final
