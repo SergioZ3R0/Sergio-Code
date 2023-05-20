@@ -3,7 +3,7 @@
 #Uso: ./crear_recursos.sh "recurso" "propietario" "permisos"
 if [ $# -ne 4 ]
 then
-	echo se necesita 4 argumentos para poder ejecutar el script: recurso propietario grupo permisos
+	echo se necesita 4 argumentos para poder ejecutar el script: recurso, propietario, grupo y permisos
 	exit
 fi
 #Crear el recurso
