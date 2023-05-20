@@ -12,4 +12,4 @@ echo ""sudo samba-tool user create "${name}" '@ITB2021.' --userou="OU=${OU}"   -
 sudo samba-tool user create "${name}" '@ITB2021.' --userou="OU=${OU}"   --surname="${surname}" --given-name="${gvname}"
 #Añadir usuario al grupo correspondiente
 sudo samba-tool group addmembers "${group}" "${name}"
-done < usuaris.csv
+done < usuarios.csv
