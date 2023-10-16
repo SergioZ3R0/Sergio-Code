@@ -1,6 +1,6 @@
 #!/bin/bash
 # Este script se utiliza para crar un usuario en su unidad organizativa correspondiente y lo añade a su grupo correspondiente.
-#Uso: ./crear_usuari.sh
+echo -n " Uso: ./crear_usuari.sh nombre nombreOU apellido displayUser Grupo\n ejemplo ./crear_usuari.sh Juan OU-Admin Garcia JGarcia gadmins"
 
 #Crear usuario
 if [ $# -ne 5 ]
