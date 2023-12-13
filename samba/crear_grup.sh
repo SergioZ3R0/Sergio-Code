@@ -1,5 +1,6 @@
 #!/bin/bash
-# Script que crea un grup dins d’una unitat organitzativa al domini de SambaAD amb la comanda samba-tool
+#Author: SergioZ3R0
+# Script que crea un grupo dentro de una unidad organitzativa en  el dominio de SambaAD utilizando el comando samba-tool
 # Ús: ./crear_grup.sh
 
 # Obtenir els tres paràmetres per entrada de l'usuari (grup, unitat organitzativa i descripció)
