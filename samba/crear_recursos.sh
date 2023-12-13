@@ -1,4 +1,5 @@
 #!/bin/bash
+#Author: SergioZ3R0
 #Este script se utiliza para crear recuros, asignarle los permisos y sus propietarios.
 #Uso: ./crear_recursos.sh "recurso" "propietario" "permisos"
 if [ $# -ne 4 ]
