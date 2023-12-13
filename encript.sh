@@ -1,4 +1,5 @@
 #!/bin/bash
+#Author: SergioZ3R0
 read -p "Escribe el numero 5 si quieres inverso " reverse
 echo -e "Este script necesita dos parametros origen y destino "
 read -p "Indica la ruta al archivo origen " archivoOrigen
