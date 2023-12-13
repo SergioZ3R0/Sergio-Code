@@ -1,4 +1,5 @@
 #!/bin/bash
+#Author: SergioZ3R0
 #Este es un Script para crackear hashes mediante ataque de diccionario sirve para cualquier tipo do hash.
 echo -e "Para que este script funcione previamente tienes que haber intalado HASHCAT sudo apt install hashcat\n"
 read -p "Introduce el archivo de Output " Output
