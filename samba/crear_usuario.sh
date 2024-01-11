@@ -1,7 +1,7 @@
 #!/bin/bash
 #Author: SergioZ3R0
 # Este script se utiliza para crar un usuario en su unidad organizativa correspondiente y lo añade a su grupo correspondiente.
-echo -n " Uso: ./crear_usuari.sh nombre nombreOU apellido displayUser Grupo\n ejemplo ./crear_usuari.sh Juan OU-Admin Garcia JGarcia gadmins"
+echo -ne " Uso: ./crear_usuari.sh nombre nombreOU apellido displayUser Grupo\n ejemplo ./crear_usuari.sh Juan OU-Admin Garcia JGarcia gadmins"
 
 #Crear usuario
 if [ $# -ne 5 ]
