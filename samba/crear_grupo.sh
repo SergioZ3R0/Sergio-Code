@@ -3,7 +3,7 @@
 # Script que crea un grupo dentro de una unidad organitzativa en  el dominio de SambaAD utilizando el comando samba-tool
 # Ús: ./crear_grup.sh
 
-# Obtenir els tres paràmetres per entrada de l'usuari (grup, unitat organitzativa i descripció)
+# Obtener los paràmetres para la ejecucion del script (grupo, unidad organitzativa i descripción)
 read -p "Introduce el nombre del grupo: " GName
 read -p "Introduce el nombre de la OU a la que estara asociado: " OUName
 read -p "Introduce la descripcion del grupo: " Description
