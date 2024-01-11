@@ -3,7 +3,7 @@
 # Script que crea una unidad organitzativa en el dominio de SambaAD autilizando el comando samba-tool
 # Uso: ./crear_OU.sh
 echo Este scrip se utiliza para crear unidades organizativas mediente samba-tool
-# Obtenir els dos paràmetres per entrada de l'usuari
+# Obtener los paràmetres para la ejecucion del script
 read -p "Itroduce el nombre de la unidad organizativa: " Name
 read -p "Introduce la descripcion de la unidad organizativa: " Description
 # Crear la unitat organitzativa
