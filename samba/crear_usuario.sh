@@ -6,7 +6,7 @@ echo -n " Uso: ./crear_usuari.sh nombre nombreOU apellido displayUser Grupo\n ej
 #Crear usuario
 if [ $# -ne 5 ]
 then
-	echo Se necesitan 5 argumentos para poder ejecutar el Script
+	echo "Se necesitan 5 argumentos para poder ejecutar el Script"
 	exit
 fi
 sudo samba-tool user create "$1" '@ITB2021.' --userou="OU=$2"   --surname="$3" --given-name="$4"
