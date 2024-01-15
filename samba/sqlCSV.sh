@@ -20,5 +20,7 @@ while IFS= read -r line; do
                 #Añadir usuario al grupo correspondiente
                 sudo samba-tool group addmembers "${group}" "${name}"
                 sed -i '1d' "usuarios.csv"
+                if [(echo $? != 0)]; then
+                        echo -ne "Los parametros introducidos son incorrectos o faltan parametros"
         done < usuarios.csv
 done < usuarios.csv
