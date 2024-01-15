@@ -1,4 +1,5 @@
 #!/bin/bash
+# Author: SergioZ3R0
 # Configuración de la base de datos
 DB_USER="root"
 DB_PASSWORD="SergioZ3R0"
