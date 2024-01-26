@@ -1,4 +1,4 @@
-# RubberDucky With a Raspberry Pi Pico
+# Z3R0 CODE
 In this Repository, you will find some scripts on bash and python.
 
 To make the basic configuration:
