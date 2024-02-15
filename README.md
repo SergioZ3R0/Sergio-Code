@@ -1,5 +1,6 @@
 # Z3R0 CODE
 Disclaimer: I don't make responsible for the use of the code on this repository
+
 In this Repository, you will find some scripts on bash and python.
 
 To make the basic configuration:
