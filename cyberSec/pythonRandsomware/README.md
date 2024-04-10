@@ -19,16 +19,20 @@ This directory contains Python scripts for a ransomware simulation. The scripts 
 
 To encrypt the files in the current directory, run the `voldemort.py` script:
 
-python3 voldemort.pyA
+python3 voldemort.py
 
-This will encrypt all non-critical system files in the current directory and send the encryption key to the host specified in the script.  
-Restoring Files
 
-To restore the files from the encrypted versions, run the decrypt.py script:
+This will encrypt all non-critical system files in the current directory and send the encryption key to the host specified in the script.
+
+### Restoring Files
+
+To restore the files from the encrypted versions, run the `decrypt.py` script:
 
 python3 decrypt.py
 
-This will decrypt all files in the current directory using the encryption key stored in key.key.  
-Disclaimer
+
+This will decrypt all files in the current directory using the encryption key stored in `key.key`.
+
+## Disclaimer
 
 These scripts are simulations and should not be used for malicious purposes. Always ensure you have a backup of your files before running the scripts.
