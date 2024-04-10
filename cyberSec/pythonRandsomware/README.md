@@ -19,7 +19,6 @@ This directory contains Python scripts for a ransomware simulation. The scripts 
 
 To encrypt the files in the current directory, run the `voldemort.py` script:
 
-```bash
 python3 voldemort.pyA
 
 This will encrypt all non-critical system files in the current directory and send the encryption key to the host specified in the script.  
