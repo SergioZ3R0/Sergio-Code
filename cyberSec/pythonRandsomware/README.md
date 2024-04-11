@@ -17,7 +17,7 @@ This directory contains Python scripts for a ransomware simulation. The scripts 
 
 ### Encrypting Files
 
-To encrypt the files in the current directory, run the `voldemort.py` script:
+To encrypt the files in the current directory, run the `darthvader.py` script:
 
 python3 darthvader.py
 
