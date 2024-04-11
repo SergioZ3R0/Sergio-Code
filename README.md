@@ -25,7 +25,7 @@ Navigate to the `bashRandsomware` directory and run the `randsomware.sh` script 
 
 ### Python Ransomware Simulation
 
-Navigate to the `pythonRandsomware` directory and run the `voldemort.py` or `decrypt.py` scripts as needed. For more details, refer to the README.md file in the `pythonRandsomware` directory.
+Navigate to the `pythonRandsomware` directory and run the `darthvader.py` or `decrypt.py` scripts as needed. For more details, refer to the README.md file in the `pythonRandsomware` directory.
 
 ## Disclaimer
 
