@@ -10,7 +10,7 @@ This directory contains Python scripts for a ransomware simulation. The scripts 
 
 ## Scripts
 
-- `voldemort.py`: This script encrypts all non-critical system files in the current directory and sends the encryption key to a specified host.
+- `darthvader.py`: This script encrypts all non-critical system files in the current directory and sends the encryption key to a specified host.
 - `decrypt.py`: This script decrypts all files in the current directory using a provided encryption key.
 
 ## Usage
@@ -19,7 +19,7 @@ This directory contains Python scripts for a ransomware simulation. The scripts 
 
 To encrypt the files in the current directory, run the `voldemort.py` script:
 
-python3 voldemort.py
+python3 darthvader.py
 
 
 This will encrypt all non-critical system files in the current directory and send the encryption key to the host specified in the script.
