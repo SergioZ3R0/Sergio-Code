@@ -1,5 +1,5 @@
 #!/bin/bash
-#Author: SergioZ3R0
+# Author: SergioZ3R0
 name_decompressed=$(7z l $1 | grep "Name" -A 2 | tail -n 1 | awk 'NF{print $NF}')
 7z x $1 > /dev/null 2>&1
 
