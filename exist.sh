@@ -1,5 +1,5 @@
 #!/bin/bash
-#Author: SergioZ3R0
+# Author: SergioZ3R0
 read -p "dime un nombre:" nombre
 file=comprobar.txt
 find -type f -name $nombre 2>/dev/null 1>comprobar.txt
