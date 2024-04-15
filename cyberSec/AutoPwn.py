@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+# Author: SergioZ3R0
 import requests
 import signal
 import pdb # Debugging Purposes
