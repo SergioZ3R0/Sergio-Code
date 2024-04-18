@@ -1,3 +1,4 @@
+# Author: SergioZ3R0
 import subprocess # Import the subprocess module
 import sys # Import the sys module
 import os # Import the os module

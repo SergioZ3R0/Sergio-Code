@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Author: SergioZ3R0
 # Configuración de la base de datos
 DB_NAME="TEST"
 DB_USER="root"

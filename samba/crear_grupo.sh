@@ -1,5 +1,5 @@
 #!/bin/bash
-#Author: SergioZ3R0
+# Author: SergioZ3R0
 # Script que crea un grupo dentro de una unidad organitzativa en  el dominio de SambaAD utilizando el comando samba-tool
 # Ús: ./crear_grup.sh
 

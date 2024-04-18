@@ -1,5 +1,5 @@
 #!/bin/bash
-#Author: SergioZ3R0
+# Author: SergioZ3R0
 # Este script se utiliza para crear un usuario en su unidad organizativa correspondiente y lo añade a su grupo correspondiente medianto un archivo CSV.
 #Uso: ./crear_usuari.sh
 

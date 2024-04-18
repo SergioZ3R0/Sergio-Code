@@ -1,5 +1,5 @@
 #!/bin/bash
-#Author: SergioZ3R0
+# Author: SergioZ3R0
 # Script que crea una unidad organitzativa en el dominio de SambaAD autilizando el comando samba-tool
 # Uso: ./crear_OU.sh
 echo Este scrip se utiliza para crear unidades organizativas mediente samba-tool
