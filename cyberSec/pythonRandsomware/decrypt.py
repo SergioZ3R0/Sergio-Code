@@ -22,7 +22,7 @@ def recorrer_arbol_directorios(directory):
             rute_element = os.path.join(directory, file)
             if not os.path.islink(rute_element):
                 if os.path.isdir(rute_element):
-                    # Ignora los directorios relacionados con Python
+                    # Ignora los directorios relacionados con Python.
                     if "python" in rute_element.lower():
                         continue
                     print("Directory:", rute_element)
