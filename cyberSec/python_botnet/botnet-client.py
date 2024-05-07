@@ -1,6 +1,6 @@
 import socket
 
-# The server's IP address and port
+# The server's IP address and port.
 SERVER_IP = "172.22.9.105"
 SERVER_PORT = 12345
 
