@@ -7,7 +7,7 @@ from datetime import datetime, timedelta # Import the datetime and timedelta
 def install(package): # Install the required package
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-install('cryptography') # Install the cryptography package
+install('cryptography') # Install the cryptography package.
 from cryptography.fernet import Fernet  # Import the Fernet class from the cryptography module
 
 files = [] # List to store the files in the current directory

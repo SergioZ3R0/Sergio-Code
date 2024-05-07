@@ -12,7 +12,7 @@ def install(package): # Install the required package
 install('cryptography') # Install the cryptography package
 from cryptography.fernet import Fernet
 
-files = [] # List to store the files in the current directory
+files = [] # List to store the files in the current directory.
 def recorrer_arbol_directorios(directory):
     global files
     try:
