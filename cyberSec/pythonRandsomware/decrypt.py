@@ -61,4 +61,3 @@ for file in files:
     data_decrypted = Fernet(key).decrypt(data)
     with open(file, "wb") as f:
         f.write(data_decrypted)
-# Añadir contado de horas con menu opcion D para desencriptar y contador de tiempo transcurrido si el tiempo trasncurdido es mayior a 48 horas warnning y se elimina el decrypt.py.
