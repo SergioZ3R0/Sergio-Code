@@ -5,5 +5,5 @@ IFS=","
  
 while read name group secgroup 
 do
-useradd $1 -m -g $2 -G $3 -s /bin/bash
+useradd ${name} -m -g ${group} -G ${secgroup} -s /bin/bash
 < $file
