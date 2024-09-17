@@ -11,7 +11,7 @@ from orca.braille import Region
 def install(package): # Install the required package
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-install('pywinrm') # Install the cryptography package
+install('pywinrm') # Install the cryptography package.
 from smb.SMBConnection import SMBConnection
 
 #region SMB
