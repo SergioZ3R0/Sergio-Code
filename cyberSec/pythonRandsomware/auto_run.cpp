@@ -40,3 +40,5 @@ int main() {
 
     return 0;
 }
+
+//To compile the auto_run use g++ auto_run.cpp -o auto_run
