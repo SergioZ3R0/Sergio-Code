@@ -33,6 +33,22 @@ python3 decrypt.py
 
 This will decrypt all files in the current directory using the encryption key stored in `key.key`.
 
+### Spreading the malware
+
+Search and finds some services vulnerable to spread the Randsomware
+
+spread.py
+
+### Autorun to infect
+
+An autorun writen on c++ compiled to download and execute darthvader.py
+
+auto_run
+
+auto_run.cpp
+
 ## Disclaimer
 
 These scripts are simulations and should not be used for malicious purposes. Always ensure you have a backup of your files before running the scripts.
+
+Do not download compiled auto_run and execute it it may run darthvader.py and encrypt your files
