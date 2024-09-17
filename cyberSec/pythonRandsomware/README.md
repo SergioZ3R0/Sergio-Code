@@ -12,6 +12,7 @@ This directory contains Python scripts for a ransomware simulation. The scripts 
 
 - `darthvader.py`: This script encrypts all non-critical system files in the current directory and sends the encryption key to a specified host.
 - `decrypt.py`: This script decrypts all files in the current directory using a provided encryption key.
+- `window.py`: Shows a simple windos with some information to make the victim pay the rescue
 
 ## Usage
 
@@ -29,6 +30,10 @@ This will encrypt all non-critical system files in the current directory and sen
 To restore the files from the encrypted versions, run the `decrypt.py` script:
 
 python3 decrypt.py
+
+### Window Display
+
+python3 window.py
 
 
 This will decrypt all files in the current directory using the encryption key stored in `key.key`.
