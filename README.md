@@ -14,18 +14,9 @@ This repository contains various scripts for cybersecurity simulations. These sc
 
 ## Directories
 
-- `bashRandsomware`: This directory contains a Bash script for a ransomware simulation.
-- `pythonRandsomware`: This directory contains Python scripts for a ransomware simulation.
-
-## Usage
-
-### Bash Ransomware Simulation
-
-Navigate to the `bashRandsomware` directory and run the `randsomware.sh` script with the appropriate options. For more details, refer to the README.md file in the `bashRandsomware` directory.
-
-### Python Ransomware Simulation
-
-Navigate to the `pythonRandsomware` directory and run the `darthvader.py` or `decrypt.py` scripts as needed. For more details, refer to the README.md file in the `pythonRandsomware` directory.
+- `cyberSec`: This directory contains the main scripts for the ransomware simulation and other utilities.
+- `utilities`: This directory contains additional scripts and utilities for system administration.
+- `samba`: This directory contains scripts for setting up a Samba server and configuring shares.
 
 ## Disclaimer
 
