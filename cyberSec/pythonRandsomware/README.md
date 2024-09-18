@@ -1,5 +1,5 @@
 # `pythonRansomware` - Ransomware Simulation Scripts
-
+AÑADIR ROBO DE LOS DATAOS
 This directory contains Python scripts for a ransomware simulation. The scripts encrypt all non-critical system files in a specified directory and delete the original files. They also provide a mechanism to restore the files from the encrypted versions.
 
 ## Table of Contents
