@@ -13,6 +13,11 @@ This directory contains Python scripts for a ransomware simulation. The scripts 
 - `darthvader.py`: This script encrypts all non-critical system files in the current directory and sends the encryption key to a specified host.
 - `decrypt.py`: This script decrypts all files in the current directory using a provided encryption key.
 - `window.py`: Shows a simple windos with some information to make the victim pay the rescue
+- `spread.py`: Search and finds some services vulnerable to spread the Randsomware'
+- `auto_run`: An autorun writen on c++ compiled to download and execute darthvader.py
+- `auto_run.cpp`: C++ code to compile the autorun
+- `window.py`: Shows a simple windos with some information to make the victim pay the rescue
+- `spread.py`: Search and finds some services vulnerable to spread the Randsomware'
 
 ## Usage
 
@@ -51,6 +56,12 @@ An autorun writen on c++ compiled to download and execute darthvader.py
 auto_run
 
 auto_run.cpp
+
+### Stealing data
+
+Steal data from the victim
+
+steal.py
 
 ## Disclaimer
 
