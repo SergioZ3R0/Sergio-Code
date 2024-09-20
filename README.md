@@ -4,7 +4,7 @@ FOR HELP
 
 POLKADOT: 15SYbCMVUaL37s5VqGFrRPZYXkejZjVVvCzp3KZ8UcVdvcdH
 
-This repository contains various scripts for cybersecurity simulations. These scripts are written in Bash and Python and simulate ransomware attacks by encrypting all non-critical system files in a specified directory and deleting the original files. They also provide a mechanism to restore the files from the encrypted versions.
+This repository contains various scripts for cybersecurity simulations. These scripts are written in Bash and Python and simulate atacks or administrate systems.
 
 ## Table of Contents
 
