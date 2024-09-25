@@ -14,8 +14,7 @@ This directory contains Python scripts for a ransomware simulation. The scripts 
 - `decrypt.py`: This script decrypts all files in the current directory using a provided encryption key.
 - `window.py`: Shows a simple window with some information to make the victim pay the rescue
 - `spread.py`: Search and finds some services vulnerable to spread the Randsomware'
-- `auto_run`: An autorun writen on c++ compiled to download and execute darthvader.py
-- `auto_run.cpp`: C++ code to compile the autorun
+- `auto_run.py`: An autorun writen on python compiled to download and execute darthvader.py
 - `spread.py`: Search and finds some services vulnerable to spread the Randsomware'
 
 ## Usage
