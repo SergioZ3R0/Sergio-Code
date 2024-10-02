@@ -11,22 +11,31 @@ known_ports = {
     23: 'Telnet',
     25: 'SMTP',
     53: 'DNS',
+    67: 'DHCP Server',
+    68: 'DHCP Client',
     80: 'HTTP',
     110: 'POP3',
-    111: 'RPCBind',
-    135: 'MS RPC',
-    139: 'NetBIOS',
     143: 'IMAP',
+    161: 'SNMP',
+    162: 'SNMP Trap',
+    194: 'IRC',
     443: 'HTTPS',
     445: 'Microsoft-DS',
-    993: 'IMAP SSL',
-    995: 'POP3 SSL',
-    1723: 'PPTP',
+    587: 'SMTP Submission',
+    631: 'IPP',
+    993: 'IMAPS',
+    995: 'POP3S',
     3306: 'MySQL',
+    5432: 'PostgreSQL',
+    6379: 'Redis',
+    8080: 'HTTP Proxy',
+    8443: 'HTTPS Proxy',
+    27017: 'MongoDB',
+    1723: 'PPTP',
     3389: 'RDP',
-    5900: 'VNC',
-    8080: 'HTTP Proxy'
+    5900: 'VNC'
 }
+
 
 def run_nmap_scan(target, output_file):
     # Run the Nmap command with additional options to evade firewalls
