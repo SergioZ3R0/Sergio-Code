@@ -18,10 +18,10 @@ if [ -s $SUSPICIOUS_IPS ]; then
       geoIP=$(geoiplookup $IP)
       if [ "$count" -gt "$THRESHOLD" ]; then
         geoiplookup $IP
-      if [ count -gt $THRESHOLD ]; then
+      fi
+      if [ "$count" -gt "$THRESHOLD" ]; then
         mail -s "Alerta IP encontrada: $IP ($count intentos de acceso)" $ALERT_EMAIL <<< $geoIP
+      fi
     done < $SUSPICIOUS_IPS
-
-
 fi
 
