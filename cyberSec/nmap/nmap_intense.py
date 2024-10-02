@@ -3,7 +3,7 @@ import re
 import subprocess
 import os
 
-# Diccionario de puertos conocidos y sus servicios.
+# Diccionario de puertos conocidos y sus servicios
 known_ports = {
     20: 'FTP Data Transfer',
     21: 'FTP Command Control',
