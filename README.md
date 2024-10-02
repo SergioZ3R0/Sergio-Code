@@ -14,7 +14,7 @@ This repository contains various scripts for cybersecurity simulations. These sc
 
 ## Directories
 
-- `cyberSec`: This directory contains the main scripts for the ransomware simulation and other utilities.
+- `cyberSec`: This directory contains scripts for attacks, scans and other cybersec utilities.
 - `utilities`: This directory contains additional scripts and utilities for system administration.
 - `samba`: This directory contains scripts for setting up a Samba server and configuring shares.
 
