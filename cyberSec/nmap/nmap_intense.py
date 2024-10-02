@@ -3,9 +3,29 @@ import re
 import subprocess
 import os
 
-# Lista de puertos conocidos.
+# Diccionario de puertos conocidos y sus servicios.
 known_ports = {
-    20, 21, 22, 23, 25, 53, 80, 110, 111, 135, 139, 143, 443, 445, 993, 995, 1723, 3306, 3389, 5900, 8080
+    20: 'FTP Data Transfer',
+    21: 'FTP Command Control',
+    22: 'SSH',
+    23: 'Telnet',
+    25: 'SMTP',
+    53: 'DNS',
+    80: 'HTTP',
+    110: 'POP3',
+    111: 'RPCBind',
+    135: 'MS RPC',
+    139: 'NetBIOS',
+    143: 'IMAP',
+    443: 'HTTPS',
+    445: 'Microsoft-DS',
+    993: 'IMAP SSL',
+    995: 'POP3 SSL',
+    1723: 'PPTP',
+    3306: 'MySQL',
+    3389: 'RDP',
+    5900: 'VNC',
+    8080: 'HTTP Proxy'
 }
 
 def run_nmap_scan(target, output_file):
@@ -29,12 +49,12 @@ def parse_nmap_output(file_path):
     return target, open_ports
 
 def classify_ports(open_ports):
-    known = []
+    known = {}
     redirected = []
 
     for port in open_ports:
         if port in known_ports:
-            known.append(port)
+            known[port] = known_ports[port]
         else:
             redirected.append(port)
 
@@ -43,7 +63,9 @@ def classify_ports(open_ports):
 def save_results(target, known, redirected):
     with open(f"scans/scan_{target}.txt", "w") as file:
         file.write(f"Resultados del escaneo para {target}\n")
-        file.write(f"Puertos conocidos abiertos: {known}\n")
+        file.write("Puertos conocidos abiertos:\n")
+        for port, service in known.items():
+            file.write(f"  - Puerto {port}: {service}\n")
         file.write(f"Posibles puertos redirigidos: {redirected}\n")
 
 def main():
