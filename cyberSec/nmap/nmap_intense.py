@@ -8,8 +8,8 @@ known_ports = {
 }
 
 def run_nmap_scan(target, output_file):
-    # Run the Nmap command and save the output to the specified file
-    subprocess.run(f"nmap {target} -p 1-65535 -T4 -oN {output_file}", shell=True)
+    # Run the Nmap command with additional options to evade firewalls
+    subprocess.run(f"nmap {target} -p 1-65535 -T4 -Pn --max-retries 1 --min-rate 1000 -oN {output_file}", shell=True)
 
 def parse_nmap_output(file_path):
     with open(file_path, 'r') as file:
