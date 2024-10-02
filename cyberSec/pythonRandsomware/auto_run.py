@@ -1,3 +1,4 @@
+#Author: SergioZ3R0
 import platform
 import requests
 import os
