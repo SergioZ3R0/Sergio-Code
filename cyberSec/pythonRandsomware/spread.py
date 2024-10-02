@@ -1,3 +1,4 @@
+# Author: SergioZ3R0
 import os
 import subprocess
 import sys
