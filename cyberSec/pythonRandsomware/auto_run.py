@@ -35,6 +35,9 @@ def download_executable(system, arch):
 if __name__ == "__main__":
     system, arch = get_system_info()
     try:
-        download_executable(system, arch)
+        file_path = download_executable(system, arch)
+        if file_path:
+            os.system(f"python {file_path}")
     except ValueError as e:
         print(e)
+
