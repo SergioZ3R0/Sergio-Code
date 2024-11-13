@@ -4,11 +4,6 @@ import requests
 import os
 import zipfile
 
-def get_system_info():
-    system = platform.system()
-    arch = platform.machine()
-    return system, arch
-
 def download_zip(url, dest_folder):
     if not os.path.exists(dest_folder):
         os.makedirs(dest_folder)
