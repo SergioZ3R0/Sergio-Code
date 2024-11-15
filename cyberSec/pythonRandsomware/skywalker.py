@@ -6,11 +6,7 @@ import logging
 # Configuración del logging
 logging.basicConfig(filename='log.txt', level=logging.ERROR,
                     format='%(asctime)s - %(levelname)s - %(message)s')
-#Install cryptography module
-def install(package): # Install the required package
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-install('cryptography') # Install the cryptography package
 from cryptography.fernet import Fernet  # Import the Fernet class from the cryptography module
 import socket # Import the socket module
 from datetime import datetime, timedelta # Import the datetime and timedelta
