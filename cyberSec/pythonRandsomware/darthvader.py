@@ -3,7 +3,7 @@
 from time import sleep
 import subprocess
 import sys
-imports = ["cryptography", "tk", "telnetlib", "pywinrm", "pysmb"]
+imports = ["cryptography", "pywinrm", "pysmb"]
 
 # Install necessary modules
 def install(package):
