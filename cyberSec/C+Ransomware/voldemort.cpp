@@ -64,7 +64,7 @@ void download_executable(const string& system, const string& arch) {
         if (res == CURLE_OK) {
             cout << "Downloaded " << filename << endl;
         } else {
-            cout << "Failed to download " << filename << endl;
+            cout << "Failed to download " << filename << endl;ab
         }
     }
 }

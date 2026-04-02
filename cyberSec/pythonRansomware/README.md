@@ -11,7 +11,7 @@ This directory contains Python scripts for a ransomware simulation. The scripts 
 ## Scripts
 
 - `darthvader.py`: This script encrypts all non-critical system files in the current directory and sends the encryption key to a specified host.
-- `decrypt.py`: This script decrypts all files in the current directory using a provided encryption key.
+- `skywalker.py`: This script decrypts all files in the current directory using a provided encryption key.
 - `window.py`: Shows a simple window with some information to make the victim pay the rescue
 - `spread.py`: Search and finds some services vulnerable to spread the Randsomware'
 - `auto_run.py`: An autorun writen on python compiled to download and execute darthvader.py
@@ -30,7 +30,7 @@ This will encrypt all non-critical system files in the current directory and sen
 
 ### Restoring Files
 
-To restore the files from the encrypted versions, run the `decrypt.py` script:
+To restore the files from the encrypted versions, run the `skywalker.py` script:
 
 python3 decrypt.py
 
