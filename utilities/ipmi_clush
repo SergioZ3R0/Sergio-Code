@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+
+# IPMI Cluster Shell (ipmi_clush) -- Parallel IPMI execution tool
+#
+# Author: SergioZ3R0
+# Date: 2026-05-28
+#
+# Description: Executes ipmitool commands across specified node ranges in parallel
+#              and aggregates identical outputs similarly to ClusterShell (clush).
+#
+
+if [ $# -lt 3 ]; then
+    echo "Usage: ipmi_clush '<node_ranges>' <password> '<ipmitool_command>'"
+    echo "Example: ipmi_clush 'demu4xcpu0[01-50],demu4xgpu0[01-44]' mypassword 'power status'"
+    exit 1
+fi
+
+input="$1"
+password="$2"
+ipmicmd="$3"
+
+declare -A output_map
+declare -A output_content
+all_nodes=()
+
+# Parse comma-separated groups and expand bracketed ranges (e.g., demu4xcpu0[01-50])
+IFS=',' read -r -a groups <<< "$input"
+for group in "${groups[@]}"; do
+    if [[ "$group" =~ ^(.*)\[([0-9]+)-([0-9]+)\]$ ]]; then
+        prefix="${BASH_REMATCH[1]}"
+        start="${BASH_REMATCH[2]}"
+        end="${BASH_REMATCH[3]}"
+        width=${#start}
+        for ((i=10#$start; i<=10#$end; i++)); do
+            printf -v node "%0${width}d" $i
+            all_nodes+=("${prefix}:::${node}")
+        done
+    elif [[ -n "$group" ]]; then
+        # Handle standalone nodes without range brackets
+        all_nodes+=("${group}:::")
+    fi
+done
+
+# Execute ipmitool commands and map identical outputs using MD5 keys
+for entry in "${all_nodes[@]}"; do
+    pfx="${entry%%:::*}"
+    node="${entry##*:::}"
+    
+    # Construct target BMC hostname
+    if [[ -n "$node" ]]; then
+        fullname="${pfx}${node}-bmc"
+    else
+        fullname="${pfx}-bmc"
+    fi
+    
+    # Run ipmitool capturing both stdout and stderr
+    output=$(ipmitool -I lanplus -U admin -P "$password" -H "$fullname" $ipmicmd 2>&1)
+    
+    # Hash the output to use as a unique key for response aggregation
+    key=$(echo "$output" | md5sum | cut -d' ' -f1)
+    
+    output_map[$key]+=" ${pfx}:::${node}"
+    output_content[$key]="$output"
+done
+
+# Print aggregated results in a structured clush-like layout
+for key in "${!output_map[@]}"; do
+    entries=$(echo "${output_map[$key]}" | tr ' ' '\n' | grep -v '^$' | sort -V)
+    count=$(echo "$entries" | wc -l)
+
+    # Re-group node entries back by their prefix to build compressed display ranges
+    header=""
+    declare -A prefix_nodes
+    while IFS= read -r entry; do
+        pfx="${entry%%:::*}"
+        node="${entry##*:::}"
+        prefix_nodes[$pfx]+=" $node"
+    done <<< "$entries"
+
+    for pfx in $(echo "${!prefix_nodes[@]}" | tr ' ' '\n' | sort); do
+        nodes=$(echo "${prefix_nodes[$pfx]}" | tr ' ' '\n' | grep -v '^$' | sort -V)
+        first_num=$(echo "$nodes" | head -1)
+        
+        # Handle prefixes without numeric node lists
+        if [[ -z "$first_num" ]]; then
+            header="${header}${pfx},"
+            continue
+        fi
+        
+        width=${#first_num}
+        ranges=$(echo "$nodes" | awk -v w="$width" '
+            function pad(n) { return sprintf("%0" w "d", n+0) }
+            {
+                cur = $1+0
+                if (NR == 1) { first = cur; prev = cur; next }
+                if (cur == prev + 1) { prev = cur }
+                else {
+                    if (first == prev) printf "%s,", pad(first)
+                    else printf "%s-%s,", pad(first), pad(prev)
+                    first = cur; prev = cur
+                }
+            }
+            END {
+                if (first == prev) printf "%s", pad(first)
+                else printf "%s-%s", pad(first), pad(prev)
+            }
+        ')
+        header+="${pfx}[${ranges}],"
+    done
+
+    header="${header%,}"  # Remove trailing comma
+
+    # Display clush-formatted block
+    echo "---------------"
+    echo "${header} (${count})"
+    echo "---------------"
+    echo "${output_content[$key]}"
+    unset prefix_nodes
+done
