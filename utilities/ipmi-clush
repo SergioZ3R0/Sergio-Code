@@ -1,0 +1,217 @@
+#!/usr/bin/env bash
+
+# IPMI Cluster Shell (ipmi-clush) -- Parallel IPMI execution tool
+#
+# Author: SergioZ3R0
+# Date: 2026-05-29 (Updated: 2026-06-04)
+#
+# Update Notes:
+# - FIXED HEADER FORMATTING: When 'nodeset' expanded groups, the script lost bracket context 
+#   and dumped flat lists in headers. Now leverages 'nodeset -f' (fold) to natively compress 
+#   output headers exactly like clush. Upgraded the fallback parser to auto-detect trailing numbers.
+# - ADDED CLUSTERSHELL GROUPS SUPPORT: Native integration with nodeset to resolve @groups.
+# - TRUE PARALLEL EXECUTION: Background subshells with auto-cleaning tmp directory.
+#
+# Description: Executes ipmitool commands across specified node ranges in parallel
+#              and aggregates identical outputs similarly to ClusterShell (clush).
+#
+
+if [ $# -lt 4 ]; then
+    echo "Usage: ipmi-clush <node_ranges_or_@groups> <username> <password> <ipmitool_command>"
+    echo "Example: ipmi-clush @cpu,@gpu,demu4xfat00[1-8] admin Sup3rP4ssword power status"
+    exit 1
+fi
+
+input="$1"
+username="$2"
+password="$3"
+# Grab the 4th argument and all subsequent ones, preserving spaces
+ipmicmd="${@:4}"
+
+declare -A output_map
+declare -A output_content
+all_nodes=()
+
+# --- CLUSTERSHELL GROUP INTEGRATION (@group) ---
+# If the input contains an '@', use ClusterShell's native 'nodeset' to expand it
+if [[ "$input" == *@* ]]; then
+    if command -v nodeset >/dev/null 2>&1; then
+        # Expand all groups and ranges into a comma-separated list of individual nodes
+        input=$(nodeset -S, -e "$input" 2>/dev/null)
+        if [ -z "$input" ]; then
+            echo "Error: 'nodeset' failed to resolve the group. Check your ClusterShell groups configuration."
+            exit 1
+        fi
+    else
+        echo "Error: '@' group syntax detected but 'nodeset' command (ClusterShell) is not found."
+        echo "Please install ClusterShell or use explicit node ranges."
+        exit 1
+    fi
+fi
+# -----------------------------------------------
+
+# --- INTELLIGENT RANGE PARSER ---
+# Replace commas OUTSIDE brackets with spaces to separate groups safely
+sanitized_input=""
+in_brackets=0
+for (( i=0; i<${#input}; i++ )); do
+    char="${input:$i:1}"
+    if [[ "$char" == "[" ]]; then in_brackets=1; fi
+    if [[ "$char" == "]" ]]; then in_brackets=0; fi
+    
+    if [[ "$char" == "," && $in_brackets -eq 0 ]]; then
+        sanitized_input+=" "
+    else
+        sanitized_input+="$char"
+    fi
+done
+
+# Process each node group separately and safely
+for group in $sanitized_input; do
+    if [[ "$group" =~ ^(.*)\[(.*)\]$ ]]; then
+        prefix="${BASH_REMATCH[1]}"
+        inner="${BASH_REMATCH[2]}"
+        
+        # Extract internal sub-elements separated by commas inside brackets
+        IFS=',' read -r -a inner_groups <<< "$inner"
+        for item in "${inner_groups[@]}"; do
+            if [[ "$item" =~ ^([0-9]+)-([0-9]+)$ ]]; then
+                start="${BASH_REMATCH[1]}"
+                end="${BASH_REMATCH[2]}"
+                width=${#start}
+                for ((i=10#$start; i<=10#$end; i++)); do
+                    printf -v node "%0${width}d" $i
+                    all_nodes+=("${prefix}:::${node}")
+                done
+            elif [[ "$item" =~ ^([0-9]+)$ ]]; then
+                all_nodes+=("${prefix}:::${item}")
+            fi
+        done
+    elif [[ -n "$group" ]]; then
+        # Standalone node (e.g., demu4xcpu027). Separate prefix from trailing numbers for fallback folder.
+        if [[ "$group" =~ ^(.*[^0-9])([0-9]+)$ ]]; then
+            all_nodes+=("${BASH_REMATCH[1]}:::${BASH_REMATCH[2]}")
+        else
+            all_nodes+=("${group}:::")
+        fi
+    fi
+done
+# -------------------------------------
+
+# --- TRUE PARALLEL EXECUTION ENGINE ---
+# Create a temporary directory for parallel output collection
+tmpdir=$(mktemp -d /tmp/ipmi-clush.XXXXXX)
+# Ensure the temporary directory is deleted automatically when the script exits
+trap 'rm -rf "$tmpdir"' EXIT
+
+# Launch all IPMI commands simultaneously in the background
+for entry in "${all_nodes[@]}"; do
+    pfx="${entry%%:::*}"
+    node="${entry##*:::}"
+
+    if [[ -n "$node" ]]; then
+        fullname="${pfx}${node}-bmc"
+    else
+        fullname="${pfx}-bmc"
+    fi
+
+    # Unique filename for this specific node's output
+    safe_name="${pfx}_${node}"
+
+    # Execute in a subshell (&)
+    (
+        output=$(ipmitool -I lanplus -U "$username" -P "$password" -H "$fullname" $ipmicmd 2>&1)
+        printf "%s\n" "$output" > "$tmpdir/${safe_name}.out"
+    ) &
+done
+
+# Wait for ALL background processes to finish before continuing
+wait
+# --------------------------------------
+
+# Read results from temporary files and map identical outputs
+for entry in "${all_nodes[@]}"; do
+    pfx="${entry%%:::*}"
+    node="${entry##*:::}"
+    safe_name="${pfx}_${node}"
+
+    # Read the captured output for this node
+    if [[ -f "$tmpdir/${safe_name}.out" ]]; then
+        output=$(cat "$tmpdir/${safe_name}.out")
+    else
+        output="Error: No output captured."
+    fi
+
+    # Hash the output to use as a unique key for response aggregation
+    key=$(printf "%s" "$output" | md5sum | cut -d' ' -f1)
+
+    output_map[$key]+=" ${pfx}:::${node}"
+    output_content[$key]="$output"
+done
+
+# --- CLUSH-STYLE OUTPUT GENERATION ---
+for key in "${!output_map[@]}"; do
+    entries=$(echo "${output_map[$key]}" | tr ' ' '\n' | grep -v '^$' | sort -V)
+    count=$(echo "$entries" | wc -l)
+
+    # Reconstruct the raw comma-separated list of full hostnames for this specific output
+    full_node_list=""
+    for entry in $entries; do
+        pfx="${entry%%:::*}"
+        node="${entry##*:::}"
+        full_node_list+="${pfx}${node},"
+    done
+    full_node_list="${full_node_list%,}" # Remove trailing comma
+
+    # Use native 'nodeset' to perfectly fold the header if available
+    if command -v nodeset >/dev/null 2>&1; then
+        header=$(nodeset -f "$full_node_list")
+    else
+        # Fallback manual awk folding logic
+        header=""
+        declare -A prefix_nodes
+        for entry in $entries; do
+            pfx="${entry%%:::*}"
+            node="${entry##*:::}"
+            prefix_nodes[$pfx]+=" $node"
+        done
+
+        for pfx in $(echo "${!prefix_nodes[@]}" | tr ' ' '\n' | sort); do
+            nodes=$(echo "${prefix_nodes[$pfx]}" | tr ' ' '\n' | grep -v '^$' | sort -V)
+            first_num=$(echo "$nodes" | head -1)
+
+            if [[ -z "$first_num" ]]; then
+                header="${header}${pfx},"
+                continue
+            fi
+
+            width=${#first_num}
+            ranges=$(echo "$nodes" | awk -v w="$width" '
+                function pad(n) { return sprintf("%0" w "d", n+0) }
+                {
+                    cur = $1+0
+                    if (NR == 1) { first = cur; prev = cur; next }
+                    if (cur == prev + 1) { prev = cur }
+                    else {
+                        if (first == prev) printf "%s,", pad(first)
+                        else printf "%s-%s,", pad(first), pad(prev)
+                        first = cur; prev = cur
+                    }
+                }
+                END {
+                    if (first == prev) printf "%s", pad(first)
+                    else printf "%s-%s", pad(first), pad(prev)
+                }
+            ')
+            header+="${pfx}[${ranges}],"
+        done
+        header="${header%,}"
+        unset prefix_nodes
+    fi
+
+    # Display clush-formatted block
+    echo "---------------"
+    echo "${header} (${count})"
+    echo "---------------"
+    echo "${output_content[$key]}"
+done
