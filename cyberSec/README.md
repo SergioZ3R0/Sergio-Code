@@ -25,7 +25,7 @@ Navigate to the `bashRansomware` directory and run the `ransomware.sh` script wi
 
 ### Python Ransomware Simulation
 
-Navigate to the `pythonRansomware` directory and run the `darthvader.py` or `skywalker.py` scripts as needed. For more details, refer to the README.md file in the `pythonRansomware` directory.
+Python Ransomware has been moved to the chosen-one repo, with its releases now being fully functional. [chosen-one](https://github.com/SergioZ3R0/chosen-one)
 
 ## Disclaimer
 
